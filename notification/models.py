@@ -30,9 +30,9 @@ class TopicNotificationQuerySet(models.query.QuerySet):
         return self.filter(is_read=False)
 
     def _access(self, user):
-        return self/unremoved()._access(user=user).exclude(action=0)
+        return self.unremoved()._access(user=user).exclude(action=0)
 
-    def read(self):
+    def read(self, user):
         return self.filter(user=user).update(is_read=True)
 
 class TopicNotificationManager(models.Manager):
