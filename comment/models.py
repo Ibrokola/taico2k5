@@ -25,8 +25,8 @@ ACTION = (
 
 class CommentQuerySet(models.query.QuerySet):
     """custom query set for comment module"""
-    def filter(self, *args, **kwargs):
-        pass
+    # def filter(self, *args, **kwargs):
+    #     pass
         # return super(CommentQuerySet, self).filter(*args, **kwargs)\
         #     .select_related('user__st')
 
@@ -86,7 +86,7 @@ class CommentQuerySet(models.query.QuerySet):
 class CommentManager(models.Manager):
     def get_queryset(self):
         return CommentQuerySet(self.model, using=self._db)
-    
+
 
 class Comment(models.Model):
     """ Comment model """
