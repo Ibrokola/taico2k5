@@ -45,7 +45,9 @@ INSTALLED_APPS = [
     'notification',
     'like',
     'poll',
-    'history'
+    'history',
+    'unread',
+    'favorite'
 ]
 
 SITE_ID = 1
