@@ -7,6 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.shortcuts import get_object_or_404
 
 from django.utils import timezone
+from category.models import Category 
 
 
 
