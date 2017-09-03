@@ -6,6 +6,7 @@ from django.conf import settings
 from django.db.models import F, Q, Prefetch 
 from django.utils import timezone 
 
+# from like.models import CommentLike
 
 from topic.models import Topic
 
@@ -85,6 +86,7 @@ class CommentQuerySet(models.query.QuerySet):
 class CommentManager(models.Manager):
     def get_queryset(self):
         return CommentQuerySet(self.model, using=self._db)
+    
 
 class Comment(models.Model):
     """ Comment model """
