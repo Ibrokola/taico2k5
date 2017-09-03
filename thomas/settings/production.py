@@ -37,6 +37,11 @@ INSTALLED_APPS = [
 
     #relattive apps
     'home',
+    'category',
+    'comment',
+    'search',
+    'user',
+    'topic'
 ]
 
 SITE_ID = 1
