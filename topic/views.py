@@ -1,3 +1,115 @@
-from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponsePermanentRedirect
 
-# Create your views here.
+from djconfig import config
+
+# from core.utils.paginator import paginate, yt_paginate
+# from core.utils.ratelimit.decorators import ratelimit
+from category.models import Category
+from comment.models import MOVED
+# from comment.forms import CommentForm
+# from comment.utils import comment_posted
+from comment.models import Comment
+from .models import Topic 
+# from .forms import TopicForm
+from . import utils
+
+@login_required
+@ratelimit(rate='1/10s')
+def discuss(request, category_id=None):
+    if category_id:
+        get_object_or_404(
+            Category.objects.visible(), pk=category_id)
+
+    if request.method == 'POST':
+        # form = TopicForm(user=request.user, data=request.POST)
+        # com_form = CommentForm(user=request.user, data=request.POST)
+
+        if (all([form.is_valid(), com_form.is_valid()]) and not request.is_limited()):
+            if not user.update_post_hash(form.get_topic_hash()):
+                return redirect(
+                    request.POST.get('next', None) or 
+                    form.get_category().get_absolute_url())
+
+            # wrap in transaction.atomic? inspired by spirit
+            topic = form.save()
+            com_form.topic = topic
+            comment = com_form.save()
+            comment_posted(comment=comment, mentions=com_form.mentions)
+            return redirect(topic.get_absolute_url())
+    else:
+        form = TopicForm(user=request.user, initial={'category': category_id})
+        com_form = CommentForm()
+
+    context = {
+        'form': form,
+        'com_form': com_form
+        }
+
+    template = 'topic/discuss.html'
+    return render(request, template, context)
+
+
+
+@login_required
+def update(request, pk):
+    topic = Topic.objects.for_update_or_404(pk, request.user)
+
+    if request.method == 'POST':
+        form = TopicForm(user=request.user, data=request.POST, instance=topic)
+        category_id = topic.category_id
+
+        if form.is_valid():
+            topic = form.save()
+
+            # if topic.category_id != category_id:
+            #     Comment.create_moderation_action(user=request.user, topic=topic, action=MOVED)
+
+            return redirect(request.POST.get('next', topic.get_absolute_url()))
+    else:
+        form = TopicForm(user=request.user, instance=topic)
+
+    context = {'form': form, }
+    template = 'topic/update.html'
+    return render(request, template, context)
+
+
+def detail(request, pk, slug):
+    topic = Topic.objects.get_public_or_404(pk, request.user)
+
+    if topic.slug != slug:
+        return HttpResponsePermanentRedirect(topic.get_absolute_url())
+
+    utils.topic_viewed(request=request, topic=topic)
+
+    comments = Comment.objects.for_topic(topic=topic).with_likes(user=request.user).order_by('-date')
+
+    context = {
+        'topic': topic,
+        'comments': comments
+    }
+    template = 'topic/detail.html'
+
+    return render(request, template, context)
+
+
+def index_active(request):
+    categories = Category.objects.visible().parents()
+    
+    topics = Topic.objects.visible().global_().order_by('-is_globally_pinned', '-last_active').select_related('category')
+
+    topics = yt_paginate(
+        topics,
+        per_page=config.topics_per_page,
+        page_number=request.GET.get('page', 1)
+    )
+
+    context = {
+        'categories': categories,
+        'topics': topics
+    }
+    template = 'topic/active.html'
+    return render(request, template, context)
+
+            
