@@ -16,7 +16,7 @@ from .models import Topic
 from . import utils
 
 @login_required
-@ratelimit(rate='1/10s')
+# @ratelimit(rate='1/10s')
 def discuss(request, category_id=None):
     if category_id:
         get_object_or_404(

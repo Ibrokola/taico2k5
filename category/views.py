@@ -26,5 +26,4 @@ def detail(request, pk, slug):
         return HttpResponsePermanentRedirect(category.get_absolute_url())
 
     subcategories = Category.objects.visible().children(parent=category)
-
     
