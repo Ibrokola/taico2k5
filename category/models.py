@@ -7,7 +7,7 @@ from django.utils import timezone
 from django.db.models import Q
 
 
-class CategoryQuerySet(models.QuerySet):
+class CategoryQuerySet(models.query.QuerySet):
 
     def unremoved(self):
         return self.filter(Q(parent=None) | Q(parent__is_removed=False),
@@ -32,9 +32,9 @@ class CategoryQuerySet(models.QuerySet):
 
         return self.filter(parent=parent)
 
-class CategoryManager(models.Manager):
-    def get_queryset(self):
-        return CategoryQuerySet(self.model, using=self._db)
+# class CategoryManager(models.Manager):
+#     def get_queryset(self):
+#         return CategoryQuerySet(self.model, using=self._db)
 
 
 class Category(models.Model):
@@ -53,7 +53,8 @@ class Category(models.Model):
     is_removed = models.BooleanField(_("removed"), default=False)
     is_private = models.BooleanField(_("private"), default=False)
 
-    objects = CategoryManager()
+    # objects = CategoryManager()
+    objects = CategoryQuerySet.as_manager()
 
     class Meta:
         ordering = ['title', 'pk']
