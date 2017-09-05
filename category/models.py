@@ -53,6 +53,7 @@ class Category(models.Model):
     is_removed = models.BooleanField(_("removed"), default=False)
     is_private = models.BooleanField(_("private"), default=False)
 
+    #Todo: Figure out why CategoryManager isn't getting the queryset from using=self._db before and after testing
     # objects = CategoryManager()
     objects = CategoryQuerySet.as_manager()
 
