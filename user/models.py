@@ -9,6 +9,7 @@ from django.conf import settings
 
 class UserProfile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, verbose_name=_("profile"), related_name="users_profile")
+    image = models.ImageField(upload_to='images/', null=True, blank=True)
     # slug = AutoSlugField(populate_from="user.username", db_index=False, blank=True)
     grad_year = models.PositiveIntegerField(default=0)
     contact_no = models.PositiveIntegerField(default=0)
