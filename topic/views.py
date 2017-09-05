@@ -12,7 +12,7 @@ from comment.models import MOVED
 # from comment.utils import comment_posted
 from comment.models import Comment
 from .models import Topic 
-# from .forms import TopicForm
+from .forms import TopicForm
 from . import utils
 
 @login_required
@@ -23,7 +23,7 @@ def discuss(request, category_id=None):
             Category.objects.visible(), pk=category_id)
 
     if request.method == 'POST':
-        # form = TopicForm(user=request.user, data=request.POST)
+        form = TopicForm(user=request.user, data=request.POST)
         # com_form = CommentForm(user=request.user, data=request.POST)
 
         if (all([form.is_valid(), com_form.is_valid()]) and not request.is_limited()):
