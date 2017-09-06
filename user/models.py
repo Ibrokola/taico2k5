@@ -36,8 +36,8 @@ class UserProfile(models.Model):
                                     verbose_name='Twitter handle')
 
     class Meta:
-        verbose_name = _("forum profile")
-        verbose_name_plural = _("forum profiles")
+        verbose_name = _("profile")
+        verbose_name_plural = _("profiles")
 
     def __str__(self):
         return str(self.user.username)
