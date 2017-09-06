@@ -9,7 +9,7 @@ def has_topic_notifications(user):
 
 @register.inclusion_tag('notification/form.html')
 def render_notification_form(user, topic, next=None):
-    # TODO: remove form and use notification_activate and notification_deactivate ?
+    # todo: remove form and use notification_activate and notification_deactivate ?
     try:
         notification = TopicNotification.objects.get(user=user, topic=topic)
     except TopicNotification.DoesNotExist:

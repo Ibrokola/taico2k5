@@ -97,9 +97,7 @@ class TopicNotification(models.Model):
 
     @classmethod
     def notify_new_comment(cls, comment):
-        cls.objects.filter(topic=comment.topic, is_active=True)\
-        .exclude(user=comment.user)\
-        .update(comment=comment, is_read=False, action=COMMENT, date=timezone.now())
+        cls.objects.filter(topic=comment.topic, is_active=True).exclude(user=comment.user).update(comment=comment, is_read=False, action=COMMENT, date=timezone.now())
 
     @classmethod
     def notify_new_mentions(cls, comment, mentions):

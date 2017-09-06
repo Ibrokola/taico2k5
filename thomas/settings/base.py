@@ -47,7 +47,8 @@ INSTALLED_APPS = [
     'poll',
     'history',
     'unread',
-    'favorite'
+    'favorite',
+    'bookmark'
 
 ]
 

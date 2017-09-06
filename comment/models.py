@@ -90,9 +90,9 @@ class CommentManager(models.Manager):
 
 class Comment(models.Model):
     """ Comment model """
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='post_comment_author')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='post_comment_author')
     topic = models.ForeignKey(Topic)
-    comment = models.TextField(_("comment"))
+    comment = models.TextField(_("comment"), max_length=8300)
     comment_html = models.TextField(_("comment html"))
     action = models.IntegerField(_("action"), choices=ACTION, default=COMMENT)
     date = models.DateTimeField(default=timezone.now)

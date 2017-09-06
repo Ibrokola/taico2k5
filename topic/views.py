@@ -8,8 +8,8 @@ from djconfig import config
 # from core.utils.ratelimit.decorators import ratelimit
 from category.models import Category
 from comment.models import MOVED
-# from comment.forms import CommentForm
-# from comment.utils import comment_posted
+from comment.forms import CommentForm
+from comment.utils import comment_posted
 from comment.models import Comment
 from .models import Topic 
 from .forms import TopicForm
@@ -24,10 +24,10 @@ def discuss(request, category_id=None):
 
     if request.method == 'POST':
         form = TopicForm(user=request.user, data=request.POST)
-        # com_form = CommentForm(user=request.user, data=request.POST)
+        com_form = CommentForm(user=request.user, data=request.POST)
 
         if (all([form.is_valid(), com_form.is_valid()]) and not request.is_limited()):
-            if not user.update_post_hash(form.get_topic_hash()):
+            if not request.user.update_post_hash(form.get_topic_hash()):
                 return redirect(
                     request.POST.get('next', None) or 
                     form.get_category().get_absolute_url())

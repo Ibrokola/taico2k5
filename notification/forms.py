@@ -32,7 +32,6 @@ class NotificationCreationForm(NotificationForm):
             # Do this since some of the unique_together fields are excluded.
             raise forms.ValidationError(_("This notification already exists"))
 
-        # todo: test!
         comment = self.topic.comment_set.last()
 
         if comment is None:
