@@ -13,7 +13,8 @@ urlpatterns = [
     url(r'^comment/', include('comment.urls', namespace='comment')),
     url(r'^favorite/', include('favorite.urls', namespace='favorite')),
     url(r'^notification/', include('notification.urls', namespace='notification')),
-    url(r'^unread/', include('unread.urls', namespace='unread'))
+    url(r'^unread/', include('unread.urls', namespace='unread')),
+    url(r'^u/', include('user.urls', namespace='user')),
 ]
 
 

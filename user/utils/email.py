@@ -17,7 +17,6 @@ def sender(request, subject, template_name, context, to):
     })
     message = render_to_string(template_name, context)
 
-    # todo: remove (use DEFAULT_FROM_EMAIL)
     from_email = "{site_name} <{name}@{domain}>".format(
         name="noreply",
         domain=site.domain,

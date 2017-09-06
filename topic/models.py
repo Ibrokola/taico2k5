@@ -46,7 +46,7 @@ class TopicQuerySet(models.query.QuerySet):
 
     def get_public_or_404(self, pk, user):
         # if user.is_authenticated() and user.st.is_moderator:
-        if user.is_authenticated() and user.is_moderator:
+        if user.is_authenticated() and user.is_admin:
             return get_object_or_404(self.public().select_related('category__parent'), pk=pk)
         else:
             return get_object_or_404(self.visible().select_related('category__parent'), pk=pk)
@@ -65,7 +65,7 @@ class TopicManager(models.Manager):
 
 class Topic(models.Model):
     """This model gives the posts and topics for diffrent discussions started on the forum"""
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='post_author')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='post_author')
     category = models.ForeignKey(Category, verbose_name=_("category"))
     title = models.CharField(_("title"), max_length=255)
     post = models.TextField(max_length=8192, blank=True)
