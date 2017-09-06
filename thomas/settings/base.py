@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     # 'allauth.account',
     # 'allauth.socialaccount',
     'crispy_forms',
+    'storages',
 
 
     #relattive apps
@@ -72,7 +73,7 @@ SOCIALACCOUNT_EMAIL_VERIFICATION = ACCOUNT_EMAIL_VERIFICATION
 LOGIN_REDIRECT_URL = '/'
 # SIGNUP_REDIRECT_URL = '/'
 
-CRISPY_TEMPLATE_PACK = "bootstrap3"
+CRISPY_TEMPLATE_PACK = "bootstrap4"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
