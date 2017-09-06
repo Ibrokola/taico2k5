@@ -38,6 +38,25 @@
     <link href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
     <link href="{% static 'css/nucleo-icons.css' %}" rel="stylesheet" />
 
+    <script type="text/javascript">
+        !function(name,path,ctx){
+          var latest,prev=name!=='Keen'&&window.Keen?window.Keen:false;ctx[name]=ctx[name]||{ready:function(fn){var h=document.getElementsByTagName('head')[0],s=document.createElement('script'),w=window,loaded;s.onload=s.onerror=s.onreadystatechange=function(){if((s.readyState&&!(/^c|loade/.test(s.readyState)))||loaded){return}s.onload=s.onreadystatechange=null;loaded=1;latest=w.Keen;if(prev){w.Keen=prev}else{try{delete w.Keen}catch(e){w.Keen=void 0}}ctx[name]=latest;ctx[name].ready(fn)};s.async=1;s.src=path;h.parentNode.insertBefore(s,h)}}
+        }('KeenAsync','https://d26b395fwzu5fz.cloudfront.net/keen-tracking-1.1.3.min.js',this);
+      
+        KeenAsync.ready(function(){
+          // Configure a client instance
+          var client = new KeenAsync({
+            projectId: '59b06b2ec9e77c000149fd5a',
+            writeKey: '010E82CB41DED21E845F9C2A3FAE30EC4C0D10A7CB5D93B841F2A9A67F1183C173D4F2A3D23556157E075F2A52F24B355668505B5D89F24D691AAB6EFD509A7DFBF968CB401EEDB6C4AA5287CF7A812B341BF6EDA57BE140E5A775481A72BB5C'
+          });
+      
+          // Record an event
+          client.recordEvent('pageviews', {
+            title: document.title
+          });
+        });
+    </script>
+
 </head>
 
 <body>
