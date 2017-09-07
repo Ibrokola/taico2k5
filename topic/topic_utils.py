@@ -1,4 +1,4 @@
-# from bookmark.models import CommentBookmark
+from bookmark.models import CommentBookmark
 from notification.models import TopicNotification
 from unread.models import TopicUnread
 

@@ -14,8 +14,6 @@ from bookmark.models import CommentBookmark
 
 
 
-
-
 class TopicQuerySet(models.QuerySet):
     def unremoved(self):
         return self.filter(Q(category__parent=None) | Q(category__parent__is_removed=False),
@@ -43,7 +41,7 @@ class TopicQuerySet(models.QuerySet):
         if not user.is_authenticated():
             return self 
 
-        user_bookmarks = CommentBookMark.objects.filter(user=user).select_related('topic')
+        user_bookmarks = CommentBookmark.objects.filter(user=user).select_related('topic')
         prefetch = Prefetch("commentbookmark_set", queryset=user_bookmarks, to_attr='bookmarks')
         return self.prefetch_related(prefetch)
 
@@ -64,7 +62,6 @@ class TopicQuerySet(models.QuerySet):
 # class TopicManager(models.Manager):
 #     def get_queryset(self):
 #         return TopicQuerySet(self.model, using=self._db)
-            
 
 class Topic(models.Model):
     """This model gives the posts and topics for diffrent discussions started on the forum"""

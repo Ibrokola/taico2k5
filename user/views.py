@@ -8,7 +8,7 @@ from django.http import HttpResponsePermanentRedirect
 
 from djconfig import config
 
-# from core.utils.paginator import yt_paginate
+from utils.paginator import yt_paginate
 # from .utils.email import send_email_change_email
 # from .utils.tokens import UserEmailChangeTokenGenerator
 from topic.models import Topic

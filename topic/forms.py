@@ -4,8 +4,8 @@ from django.utils.encoding import smart_bytes
 from django.utils import timezone
 
 
-# from ..core import utils
-# from ..core.utils.forms import NestedModelChoiceField
+import utils
+from utils.forms import NestedModelChoiceField
 
 from category.models import Category
 from .models import Topic 
@@ -19,18 +19,18 @@ class TopicForm(forms.ModelForm):
     )
     class Meta:
         model = Topic
-        fields = ('title', 'category', 'post')
+        fields = ('title', 'category')
 
     def __init__(self, user, *args, **kwargs):
         super(TopicForm, self).__init__(*args, **kwargs)
         self.user = user 
-        # self.fields['category'] = NestedModelChoiceField(
-        #     queryset=Category.objects.visible().opened(),
-        #     related_name='category_set',
-        #     parent_field='parent_id',
-        #     label_field='title',
-        #     label=_("Category"),
-        #     empty_label=_("Chose a category"))
+        self.fields['category'] = NestedModelChoiceField(
+            queryset=Category.objects.visible().opened(),
+            related_name='category_set',
+            parent_field='parent_id',
+            label_field='title',
+            label=_("Category"),
+            empty_label=_("Chose a category"))
 
     def get_category(self):
         return self.cleaned_data['category']
@@ -41,7 +41,7 @@ class TopicForm(forms.ModelForm):
         if topic_hash:
             return topic_hash
 
-        return utils.get_hahs((
+        return utils.get_hash((
             smart_bytes(self.cleaned_data['title']),
             smart_bytes('category-{}'.format(self.cleaned_data['category'].pk))))
 

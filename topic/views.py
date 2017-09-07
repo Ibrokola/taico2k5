@@ -4,8 +4,8 @@ from django.http import HttpResponsePermanentRedirect
 
 from djconfig import config
 
-# from core.utils.paginator import paginate, yt_paginate
-# from core.utils.ratelimit.decorators import ratelimit
+from utils.paginator import paginate, yt_paginate
+from utils.ratelimit.decorators import ratelimit
 from category.models import Category
 from comment.models import MOVED
 from comment.forms import CommentForm
@@ -13,10 +13,10 @@ from comment.utils import comment_posted
 from comment.models import Comment
 from .models import Topic 
 from .forms import TopicForm
-from . import utils
+from . import topic_utils
 
 @login_required
-# @ratelimit(rate='1/10s')
+@ratelimit(rate='1/10s')
 def discuss(request, category_id=None):
     if category_id:
         get_object_or_404(
@@ -81,7 +81,7 @@ def detail(request, pk, slug):
     if topic.slug != slug:
         return HttpResponsePermanentRedirect(topic.get_absolute_url())
 
-    utils.topic_viewed(request=request, topic=topic)
+    topic_utils.topic_viewed(request=request, topic=topic)
 
     comments = Comment.objects.for_topic(topic=topic).with_likes(user=request.user).order_by('-date')
 

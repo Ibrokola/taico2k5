@@ -8,13 +8,13 @@ from django.conf import settings
 from djconfig import config
 
 # from core.utils import paginator
-from topic.models import Topic 
+# from topic.models import Topic 
 
 
 class CommentBookmark(models.Model):
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='comment_bookmarks')
-    topic = models.ForeignKey(Topic)
+    topic = models.ForeignKey('topic.Topic')
 
     comment_number = models.PositiveIntegerField(default=0)
 
