@@ -17,13 +17,13 @@ TIME_DICT = {
 
 def validate_cache_config():
     try:
-        cache = settings.CACHES[settings.ST_RATELIMIT_CACHE]
+        cache = settings.CACHES[settings.RATELIMIT_CACHE]
     except KeyError:
         # Django will raise later when using
         # this cache so we do nothing
         return
 
-    if (not settings.ST_RATELIMIT_SKIP_TIMEOUT_CHECK and
+    if (not settings.RATELIMIT_SKIP_TIMEOUT_CHECK and
             cache.get('TIMEOUT', 1) is not None):
         # todo: ConfigurationError in next version
         warn(
@@ -50,7 +50,7 @@ def split_rate(rate):
 
 
 def fixed_window(period):
-    if settings.ST_TESTS_RATELIMIT_NEVER_EXPIRE:
+    if settings.TESTS_RATELIMIT_NEVER_EXPIRE:
         return 0
 
     if not period: 
@@ -87,7 +87,7 @@ class RateLimit:
         key_uid = '%s:%s:%d' % (
             self.uid, key, fixed_window(self.time))
         return '%s:%s' % (
-            settings.ST_RATELIMIT_CACHE_PREFIX,
+            settings.RATELIMIT_CACHE_PREFIX,
             make_hash(key_uid))
 
     def _get_keys(self, field=None):
@@ -108,11 +108,11 @@ class RateLimit:
         return [self._make_key(k) for k in keys]
 
     def _get_cache_values(self):
-        return (caches[settings.ST_RATELIMIT_CACHE]
+        return (caches[settings.RATELIMIT_CACHE]
                 .get_many(self.cache_keys))
 
     def _incr(self, key):
-        cache = caches[settings.ST_RATELIMIT_CACHE]
+        cache = caches[settings.RATELIMIT_CACHE]
         cache.add(key, 0)
 
         try:
@@ -128,7 +128,7 @@ class RateLimit:
         return [self._incr(k) for k in self.cache_keys]
 
     def is_limited(self, increment=True):
-        if not settings.ST_RATELIMIT_ENABLE:
+        if not settings.RATELIMIT_ENABLE:
             return False
 
         if increment:

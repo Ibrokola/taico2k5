@@ -13,7 +13,7 @@ from .models import Topic
 
 class TopicForm(forms.ModelForm):
     topic_hash = forms.CharField(
-        max_length=32,
+        max_length=50,
         widget=forms.HiddenInput,
         required=False
     )
@@ -30,7 +30,7 @@ class TopicForm(forms.ModelForm):
             parent_field='parent_id',
             label_field='title',
             label=_("Category"),
-            empty_label=_("Chose a category"))
+            empty_label=_("Choose a category"))
 
     def get_category(self):
         return self.cleaned_data['category']

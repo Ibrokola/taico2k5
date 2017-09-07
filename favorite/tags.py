@@ -1,4 +1,4 @@
-# from core.tags.registry import register
+from util_tags.registry import register
 from .models import TopicFavorite
 from .forms import FavoriteForm
 

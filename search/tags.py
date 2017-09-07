@@ -1,4 +1,4 @@
-# from core.tags.registry import register
+from util_tags.registry import register
 from .forms import BasicSearchForm
 
 

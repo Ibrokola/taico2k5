@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% load crispy_forms_tags %}
+{% load thomas_tags i18n %}
+
+{% block title %}{% trans "Start a discussion" %}{% endblock %}
+
+{% block head-extra %}
+<script>
+    $( document ).ready(function() {
+
+        $( "textarea" ).store( "topic_publish_comment" );
+
+    });
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="col-md-8 offset-md-2">
+        <h2 class="headline">{% trans "Start a discussion" %}</h2>
+        <form action="." method="post" class="js-reply">
+            {% csrf_token %}
+            
+            {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
+            <!-- topic -->
+            <!-- {# include "snippet/form.html" #} -->
+            {{ form|crispy }}
+
+            <!-- comment -->
+            <div class="topic-publish-comment">
+                {# include "snippet/form.html" with form=com_form #}
+                {{ com_form|crispy }}
+            </div>
+
+            <div class="container">
+                {# include comment/editor.html #}
+
+                <input type="submit" class="btn btn-default btn-sm" value="{% trans "Post" %}">
+            </div>
+        
+        </form>
+    </div>
+</div>
+{% endblock %}

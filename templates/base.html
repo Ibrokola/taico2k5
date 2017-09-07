@@ -1,4 +1,5 @@
 {% load static %}
+{% load thomas_tags i18n %}
 <!doctype html>
 <html lang="en">
 
@@ -61,7 +62,7 @@
         function createKeenWebAutoCollector(){window.keenWebAutoCollector=window.KeenWebAutoCollector.create({projectId:'59b06b2ec9e77c000149fd5a',writeKey:'010E82CB41DED21E845F9C2A3FAE30EC4C0D10A7CB5D93B841F2A9A67F1183C173D4F2A3D23556157E075F2A52F24B355668505B5D89F24D691AAB6EFD509A7DFBF968CB401EEDB6C4AA5287CF7A812B341BF6EDA57BE140E5A775481A72BB5C',onloadCallbacks:window.keenWebAutoCollector.onloadCallbacks}),window.keenWebAutoCollector.loaded()}function initKeenWebAutoCollector(){window.keenWebAutoCollector.domReady()?window.createKeenWebAutoCollector():document.addEventListener("readystatechange",function(){window.keenWebAutoCollector.domReady()&&window.createKeenWebAutoCollector()})}window.keenWebAutoCollector={onloadCallbacks:[],onload:function(a){this.onloadCallbacks.push(a)},domReady:function(){return["ready","complete"].indexOf(document.readyState)>-1}};
       </script>
       <script async type="text/javascript" src="https://d26b395fwzu5fz.cloudfront.net/keen-web-autocollector-1.0.8.min.js" onload="initKeenWebAutoCollector()"></script>
-
+      {% block head-extra %}{% endblock %}
 </head>
 
 <body>
