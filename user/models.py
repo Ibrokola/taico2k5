@@ -52,7 +52,7 @@ post_save.connect(new_user_reciever, sender=User)
 # dispatch_uid=__name__
 
 class UserProfile(models.Model):
-    user = models.OneToOneField(User, verbose_name=_("profile"), related_name='st')
+    user = models.OneToOneField(User, verbose_name=_("profile"), related_name='u')
     image = models.ImageField(upload_to='images/', null=True, blank=True)
     slug = AutoSlugField(populate_from="user.username", db_index=False, blank=True)
     grad_year = models.PositiveIntegerField(default=0)

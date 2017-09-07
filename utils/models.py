@@ -39,10 +39,10 @@ class AutoSlugField(SlugField):
             return default
 
         try:
-            slug = slugify(smart_text(value), allow_unicode=settings.ST_UNICODE_SLUGS)
-        except TypeError:  # Django 1.8
-            if settings.ST_UNICODE_SLUGS:
-                # todo: mark as safe?
+            slug = slugify(smart_text(value), allow_unicode=settings.UNICODE_SLUGS)
+        except TypeError: 
+            if settings.UNICODE_SLUGS:
+                # mark as safe?
                 slug = unicode_slugify(smart_text(value), ok='-_')
             else:
                 slug = slugify(smart_text(value))
