@@ -3,7 +3,9 @@ from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from django.utils import timezone
 from django.utils.functional import cached_property
-from django.db.models import F
+from django.db.models import F, Prefetch
+from django.apps import apps
+
 
 from comment.models import Comment
 
@@ -20,6 +22,37 @@ class PollMode(object):
     BY_NAME = dict((name, id_) for id_, name in LIST)
 
 
+class CommentPollQuerySet(models.QuerySet):
+
+    def unremoved(self):
+        return self.filter(is_removed=False)
+
+    def for_comment(self, comment):
+        return self.filter(comment=comment)
+
+    def with_choices(self):
+        choice_model = apps.get_model('CommentPollChoice')
+
+        visible_choices = choice_model.objects.unremoved()
+        prefetch_choices = Prefetch("poll_choices", queryset=visible_choices, to_attr='choices')
+        return self.prefetch_related(prefetch_choices)
+
+
+# class CommentPollManager(models.Manager):
+#     def get_queryset(self):
+#         return CommentPollQuerySet(self.model, using=self._db)
+
+#     def unremoved(self):
+#         return self.get_queryset().unremoved()
+
+#     def for_comment(self, comment):
+#         return self.get_queryset().for_comment(comment=comment)
+
+#     def with_choices(self):
+#         return self.get_queryset().with_choices()
+
+
+
 class CommentPoll(models.Model):
 
     comment = models.ForeignKey(Comment, related_name='comment_polls')
@@ -33,7 +66,8 @@ class CommentPoll(models.Model):
     is_removed = models.BooleanField(default=False)
     created_at = models.DateTimeField(default=timezone.now)
 
-    # objects = CommentPollQuerySet.as_manager()
+    objects = CommentPollQuerySet.as_manager()
+    # objects = CommentPollManager()
 
 
     class Meta:
@@ -45,6 +79,7 @@ class CommentPoll(models.Model):
     def get_absolute_url(self):
         return self.comment.get_absolute_url()
 
+    # To remove
     def get_rel_url(self, request):
         query_string = get_query_string(request, show_poll=0)
         return ''.join((request.path, '?', query_string, '#p', str(self.pk)))
@@ -123,6 +158,47 @@ class CommentPoll(models.Model):
 
 
 
+
+class CommentPollChoiceQuerySet(models.QuerySet):
+
+    def unremoved(self):
+        return self.filter(is_removed=False)
+
+    def for_comment(self, comment):
+        return self.filter(poll__comment=comment)
+
+    def for_poll(self, poll):
+        return self.filter(poll=poll)
+
+    def for_voter(self, voter):
+        return self.filter(
+            choice_votes__voter=voter,
+            choice_votes__is_removed=False
+        )
+
+    def for_vote(self, poll, voter):
+        return self.for_poll(poll).for_voter(voter).unremoved()
+
+# class CommentManager(models.Manager):
+#     def get_queryset(self):
+#         return CommentPollChoiceQuerySet(self.model, using=self._db)
+    
+#     def unremoved(self):
+#         return self.get_queryset().unremoved()
+
+#     def for_comment(self, comment):
+#         return self.get_queryset().for_comment(comment)
+
+#     def for_poll(self, poll):
+#         return self.get_queryset().for_poll(poll)
+
+#     def for_voter(self, voter):
+#         return self.get_queryset().for_voter(voter)
+
+#     def for_vote(self, poll, voter):
+#         return self.get_queryset().for_vote(poll, voter)
+
+
 class CommentPollChoice(models.Model):
     poll = models.ForeignKey(CommentPoll, related_name='poll_choices')
     number = models.PositiveIntegerField(_("number"))
@@ -130,7 +206,7 @@ class CommentPollChoice(models.Model):
     vote_count = models.PositiveIntegerField(_("vote count"), default=0)
     is_removed = models.BooleanField(default=False)
 
-    # objects = CommentPollChoiceQuerySet.as_manager()
+    objects = CommentPollChoiceQuerySet.as_manager()
 
     class Meta:
         unique_together = ('poll', 'number')
@@ -170,10 +246,7 @@ class CommentPollChoice(models.Model):
             return
 
         poll_ids_by_name = dict(
-            CommentPoll.objects
-                .for_comment(comment)
-                .unremoved()
-                .values_list('name', 'id')
+            CommentPoll.objects.for_comment(comment).unremoved().values_list('name', 'id')
         )
 
         with transaction.atomic():  # Speedup
@@ -186,3 +259,34 @@ class CommentPollChoice(models.Model):
                         'is_removed': False
                     }
                 )
+
+
+
+
+class CommentPollVoteQuerySet(models.QuerySet):
+
+    def unremoved(self):
+        return self.filter(is_removed=False)
+
+    def for_voter(self, user):
+        return self.filter(voter=user)
+
+    def for_choice(self, choice):
+        return self.filter(choice=choice)
+
+
+class CommentPollVote(models.Model):
+
+    voter = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='cp_votes')
+    choice = models.ForeignKey(CommentPollChoice, related_name='choice_votes')
+
+    is_removed = models.BooleanField(default=False)
+    created_at = models.DateTimeField(default=timezone.now)
+
+    objects = CommentPollVoteQuerySet.as_manager()
+
+    class Meta:
+        unique_together = ('voter', 'choice')
+        ordering = ['-pk', ]
+        verbose_name = _("poll vote")
+        verbose_name_plural = _("poll votes")

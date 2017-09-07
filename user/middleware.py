@@ -58,7 +58,7 @@ class LastSeenMiddleware(MiddlewareMixin):
     def process_request(self, request):
         if not request.user.is_authenticated():
             return
-
+        
         threshold = settings.ST_USER_LAST_SEEN_THRESHOLD_MINUTES * 60
         delta = timezone.now() - request.user.st.last_seen
 

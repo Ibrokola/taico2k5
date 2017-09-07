@@ -1,3 +1,9 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import CommentPoll, CommentPollChoice, CommentPollVote
+
+
+
+admin.site.register(CommentPoll)
+admin.site.register(CommentPollChoice)
+admin.site.register(CommentPollVote)

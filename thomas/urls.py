@@ -12,6 +12,7 @@ urlpatterns = [
     url(r'^category/', include('category.urls', namespace='category')),
     url(r'^topic/', include('topic.urls', namespace='topic')),
     url(r'^comment/', include('comment.urls', namespace='comment')),
+    url(r'^poll/', include('poll.urls', namespace='poll')),
     url(r'^favorite/', include('favorite.urls', namespace='favorite')),
     url(r'^notification/', include('notification.urls', namespace='notification')),
     url(r'^unread/', include('unread.urls', namespace='unread')),
