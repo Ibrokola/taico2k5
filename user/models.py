@@ -6,11 +6,13 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
 from django.conf import settings
 
+from utils.models import AutoSlugField
+
 
 class UserProfile(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, verbose_name=_("profile"), related_name="users_profile")
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, verbose_name=_("profile"), related_name='st')
     image = models.ImageField(upload_to='images/', null=True, blank=True)
-    # slug = AutoSlugField(populate_from="user.username", db_index=False, blank=True)
+    slug = AutoSlugField(populate_from="user.username", db_index=False, blank=True)
     grad_year = models.PositiveIntegerField(default=0)
     contact_no = models.PositiveIntegerField(default=0)
     bio = models.TextField(null=True, blank=True)
@@ -42,8 +44,16 @@ class UserProfile(models.Model):
     def __str__(self):
         return str(self.user.username)
 
+
     def save(self, *args, **kwargs):
+        if self.user.is_superuser:
+            self.is_administrator = True
+
         super(UserProfile, self).save(*args, **kwargs)
+
+
+    # def save(self, *args, **kwargs):
+    #     super(UserProfile, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
         return reverse('user:detail', kwargs={'pk': self.user.pk, 'slug': self.slug})
@@ -54,6 +64,6 @@ class UserProfile(models.Model):
         return bool(UserProfile.objects.filter(pk=self.pk).exclude(
                                 last_post_hash=post_hash,
                                 last_post_on__gte=timezone.now() - timedelta(
-                                    minutes=settings.ST_DOUBLE_POST_THRESHOLD_MINUTES)).update(
+                                    minutes=settings.DOUBLE_POST_THRESHOLD_MINUTES)).update(
                                 last_post_hash=post_hash,
                                 last_post_on=timezone.now()))

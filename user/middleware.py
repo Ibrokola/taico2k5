@@ -47,7 +47,7 @@ class LastIPMiddleware(MiddlewareMixin):
 
         last_ip = request.META['REMOTE_ADDR'].strip()
 
-        if request.user.last_ip == last_ip:
+        if request.user.st.last_ip == last_ip:
             return
 
         (UserProfile.objects.filter(user__pk=request.user.pk).update(last_ip=last_ip))

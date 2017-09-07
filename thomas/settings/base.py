@@ -84,9 +84,9 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'user.middleware.TimezoneMiddleware',
-    'user.middleware.LastIPMiddleware',
-    'user.middleware.LastSeenMiddleware',
-    'user.middleware.ActiveUserMiddleware',
+    # 'user.middleware.LastIPMiddleware',
+    # 'user.middleware.LastSeenMiddleware',
+    # 'user.middleware.ActiveUserMiddleware',
 ]
 
 ROOT_URLCONF = 'thomas.urls'
