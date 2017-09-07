@@ -8,12 +8,15 @@ from django.shortcuts import get_object_or_404
 
 from django.utils import timezone
 from category.models import Category 
+from utils.model_fields import AutoSlugField
+
+from bookmark.models import CommentBookmark
 
 
 
 
 
-class TopicQuerySet(models.query.QuerySet):
+class TopicQuerySet(models.QuerySet):
     def unremoved(self):
         return self.filter(Q(category__parent=None) | Q(category__parent__is_removed=False),
                             category__is_removed=False,
@@ -36,13 +39,13 @@ class TopicQuerySet(models.query.QuerySet):
             return self.filter(category=category)
         return self.filter(Q(catgeory=category) | Q(catgeory__parent=category))
 
-    # def with_bookmarks(self, user):
-    #     if not user.is_authenticated():
-    #         return self 
+    def with_bookmarks(self, user):
+        if not user.is_authenticated():
+            return self 
 
-    #     user_bookmarks = CommentBookMark.objects.filter(user=user).select_related('topic')
-    #     prefetch = Prefetch("commentbookmark_set", queryset=user_bookmarks, to_attr='bookmarks')
-    #     return self.prefetch_related(prefetch)
+        user_bookmarks = CommentBookMark.objects.filter(user=user).select_related('topic')
+        prefetch = Prefetch("commentbookmark_set", queryset=user_bookmarks, to_attr='bookmarks')
+        return self.prefetch_related(prefetch)
 
     def get_public_or_404(self, pk, user):
         # if user.is_authenticated() and user.st.is_moderator:
@@ -58,9 +61,9 @@ class TopicQuerySet(models.query.QuerySet):
         else:
             return get_object_or_404(self.visible().opened(), pk=pk, user=user) 
 
-class TopicManager(models.Manager):
-    def get_queryset(self):
-        return TopicQuerySet(self.model, using=self._db)
+# class TopicManager(models.Manager):
+#     def get_queryset(self):
+#         return TopicQuerySet(self.model, using=self._db)
             
 
 class Topic(models.Model):
@@ -68,8 +71,8 @@ class Topic(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='post_author')
     category = models.ForeignKey(Category, verbose_name=_("category"))
     title = models.CharField(_("title"), max_length=255)
-    post = models.TextField(max_length=8192, blank=True)
-    # slug = AutoSlugField(populate_from="title", db_index=False, blank=True)
+    # post = models.TextField(max_length=8192, blank=True)
+    slug = AutoSlugField(populate_from="title", db_index=False, blank=True)
     date = models.DateTimeField(_("date"), default=timezone.now)
     last_active = models.DateTimeField(_("last active"), default=timezone.now)
     reindex_at = models.DateTimeField(_("reindex at"), default=timezone.now)
@@ -79,7 +82,8 @@ class Topic(models.Model):
     view_count = models.PositiveIntegerField(_("views count"), default=0)
     comment_count = models.PositiveIntegerField(_("comment count"), default=0)
 
-    objects = TopicManager()
+    # objects = TopicManager()
+    objects = TopicQuerySet.as_manager()
     class Meta:
         ordering = ['-last_active', '-pk']
         verbose_name = _("topic")
@@ -100,15 +104,15 @@ class Topic(models.Model):
     def main_category(self):
         return self.category.parent or self.category
 
-    # @property
-    # def bookmark(self):
-    #     try:
-    #         assert len(self.bookmarks) <= 1
-    #         return self.bookmarks[0]
-    #     except (AttributeError, IndexError):
-    #         return 0
+    @property
+    def bookmark(self):
+        try:
+            assert len(self.bookmarks) <= 1
+            return self.bookmarks[0]
+        except (AttributeError, IndexError):
+            return 0
 
-    #     return max(0, self.comment_count - self.bookmarks[0].comment_number)
+        return max(0, self.comment_count - self.bookmarks[0].comment_number)
 
     @property
     def has_new_comments(self):
