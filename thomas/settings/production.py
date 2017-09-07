@@ -35,6 +35,8 @@ INSTALLED_APPS = [
     # 'allauth.socialaccount',
     'crispy_forms',
     'storages',
+    'djconfig',
+    'haystack',
 
 
     #relattive apps
@@ -50,7 +52,8 @@ INSTALLED_APPS = [
     'history',
     'unread',
     'favorite',
-    'bookmark'
+    'bookmark',
+    'utils'
 ]
 
 SITE_ID = 1
