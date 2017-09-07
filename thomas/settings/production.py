@@ -78,6 +78,39 @@ LOGIN_REDIRECT_URL = '/'
 
 CRISPY_TEMPLATE_PACK = "bootstrap4"
 
+RATELIMIT_ENABLE = True
+RATELIMIT_CACHE_PREFIX = 'srl'
+RATELIMIT_CACHE = 'default'
+RATELIMIT_SKIP_TIMEOUT_CHECK = False
+
+NOTIFICATIONS_PER_PAGE = 20
+
+# COMMENT_MAX_LEN = 3000
+MENTIONS_PER_COMMENT = 30
+DOUBLE_POST_THRESHOLD_MINUTES = 30
+
+YT_PAGINATOR_PAGE_RANGE = 3
+
+SEARCH_QUERY_MIN_LEN = 3
+
+USER_LAST_SEEN_THRESHOLD_MINUTES = 1
+
+# PRIVATE_FORUM = False
+
+ALLOWED_UPLOAD_IMAGE_FORMAT = ('jpeg', 'png', 'gif')
+ALLOWED_URL_PROTOCOLS = {
+    'http', 'https', 'mailto', 'ftp', 'ftps',
+    'git', 'svn', 'magnet', 'irc', 'ircs'}
+
+UNICODE_SLUGS = True
+
+# UNIQUE_EMAILS = True
+# CASE_INSENSITIVE_EMAILS = True
+
+# Tests helpers
+TESTS_RATELIMIT_NEVER_EXPIRE = False
+
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -86,6 +119,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'user.middleware.TimezoneMiddleware',
+    'user.middleware.LastIPMiddleware',
+    'user.middleware.LastSeenMiddleware',
+    'user.middleware.ActiveUserMiddleware',
 ]
 
 ROOT_URLCONF = 'thomas.urls'
@@ -197,4 +234,11 @@ SOCIALACCOUNT_PROVIDERS = {
         'VERIFIED_EMAIL': True,
         'VERSION': 'v2.4',
     }
+}
+
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
+        'PATH': os.path.join(os.path.dirname(__file__), 'search', 'whoosh_index'),
+    },
 }
