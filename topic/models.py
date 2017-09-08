@@ -75,6 +75,7 @@ class Topic(models.Model):
     reindex_at = models.DateTimeField(_("reindex at"), default=timezone.now)
     is_pinned = models.BooleanField(_("pinned"), default=False)
     is_globally_pinned = models.BooleanField(_("globally pinned"), default=False)
+    is_closed = models.BooleanField(_("closed"), default=False)
     is_removed = models.BooleanField(default=False)
     view_count = models.PositiveIntegerField(_("views count"), default=0)
     comment_count = models.PositiveIntegerField(_("comment count"), default=0)
