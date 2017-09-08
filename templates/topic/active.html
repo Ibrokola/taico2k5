@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% load thomas_tags i18n %}
+
+{% block title %}{% trans "Latest active discussions" %}{% endblock %}
+
+{% block content %}
+<div class="conatainer">
+    {% include "topic/_top_bar.html" with category=None categories=categories %}
+
+    {% include "topic/_render_list.html" %}
+
+    {% render_paginator topics %}
+</div>
+{% endblock %}

@@ -6,6 +6,15 @@
 {% block title %}{% trans "Start a discussion" %}{% endblock %}
 
 {% block head-extra %}
+<style>
+    .reply-markdown li {
+        display: inline-block;
+        *display: inline;
+        zoom: 1; 
+        margin-left: 12px;
+    }
+</style>
+
 <script>
     $( document ).ready(function() {
 
@@ -17,6 +26,7 @@
 
 {% block content %}
 <div class="container">
+    <div style="margin-top: 100px;"></div>
     <div class="col-md-8 offset-md-2">
         <h2 class="headline">{% trans "Start a discussion" %}</h2>
         <form action="." method="post" class="js-reply">
@@ -33,12 +43,11 @@
                 {{ com_form|crispy }}
             </div>
 
-            <div class="container">
-                {# include comment/editor.html #}
-
-                <input type="submit" class="btn btn-default btn-sm" value="{% trans "Post" %}">
+            <div class="" style="margin-left: -50px;">
+                {% include "comment/editor.html" %}
+                
             </div>
-        
+            <input type="submit" class="btn btn-default btn-sm" value="{% trans "Post" %}">
         </form>
     </div>
 </div>

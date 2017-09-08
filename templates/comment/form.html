@@ -1,0 +1,31 @@
+{% load i18n %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+<form action="{% url "comment:publish" topic_id %}" method="post" class="js-reply">
+    {% csrf_token %}
+    {% if next %}<input type="hidden" name="next" value="{{ next }}" />{% endif %}
+
+    <!-- {{ form.non_field_errors }} -->
+
+    {# for field in form #}
+        <!-- {{ field.errors }} -->
+        <!-- {{ field }} -->
+    {# endfor #}
+    {{ com_form|crispy }}
+
+    <div class="container">
+        {% include "comment/_editor.html" %}
+
+        <input class="btn btn-default btn-sm" type="submit" value="{% trans 'Post' %}" />
+    </div>
+</form>
+
+
+<script>
+    $( document ).ready(function() {
+
+        $( ".reply" ).find( "textarea" ).store( "comment-thread-{{ topic_id }}" );
+
+	});
+</script>
