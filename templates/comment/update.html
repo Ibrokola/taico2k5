@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+
+{% load i18n %}
+
+{% block title %}{% trans "Edit comment" %}{% endblock %}
+
+{% block content %}
+<div class="container">
+        <div style="margin-top: 100px;"></div>
+    <h1 class="headline">{% trans "Edit comment" %}</h1>
+    
+    <form action="." method="post" class="js-reply">
+        {% csrf_token %}
+        {# include "spirit/_form.html" #}
+        {{ com_form|crispy }}
+
+        <div class="container">
+            {% include "comment/editor.html" %}
+
+            <input class="btn btn-default btn-sm" type="submit" value="{% trans 'Post' %}" />
+        </div>
+    </form>
+</div>
+{% endblock %}

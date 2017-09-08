@@ -11,9 +11,9 @@ from django.utils.html import escape
 
 from djconfig import config
 
-# from core import utils
-# from core.utils.paginator import yt_paginate
-# from core.utils.paginator.infinite_paginator import paginate
+import utils
+from utils.paginator import yt_paginate
+from utils.paginator.infinite_paginator import paginate
 from topic.models import Topic
 from .models import TopicNotification
 from .forms import NotificationForm, NotificationCreationForm

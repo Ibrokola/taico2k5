@@ -1,0 +1,16 @@
+{% load i18n %}
+
+{% if notification %}
+    <form method="post" action="{% url 'notification:update' notification.pk %}">
+{% else %}
+    <form method="post" action="{% url 'notification:create' topic_id %}">
+{% endif %}
+    {% csrf_token %}
+    {% include "snippet/form.html" %}
+
+    {% if notification.is_active %}
+        <input class="btn btn-primary btn-sm is-undo" type="submit" value="{% trans "Unnotify Me" %}" />
+    {% else %}
+        <input class="btn btn-primary btn-sm" type="submit" value="{% trans "Notify Me" %}" />
+    {% endif %}
+</form>

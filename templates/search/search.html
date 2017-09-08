@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% load spirit_tags i18n %}
+
+{% block title %}{% trans "Search" %}{% endblock %}
+
+{% block content %}
+<div class="container">
+    {% if not query %}
+        <h1 class="headline">{% trans "Search" %}</h1>
+
+        <form method="get" action="{% url 'search:search' %}">
+            {% include "snippet/form.html" %}
+
+            <input class="button" type="submit" value="{% trans "Search" %}" />
+        </form>
+
+    {% else %}
+        <h1 class="headline">{% trans "Results" %}</h1>
+
+        {% if page %}
+            {% include "search/_render_list.html" with topics=page %}
+            {% render_paginator page %}
+        {% else %}
+            <p>{% trans "Sorry no search results found." %}</p>
+        {% endif %}
+
+    {% endif %}
+</div>
+{% endblock %}

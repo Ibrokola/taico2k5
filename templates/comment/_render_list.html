@@ -1,4 +1,4 @@
-{% load spirit_tags i18n %}
+{% load thomas_tags i18n %}
 
 <div class="comments">
 
@@ -97,14 +97,14 @@
                 <div class="comment-media">
                     <div class="comment-img">
                         <div class="comment-removed">
-                            <a href="{{ c.user.st.get_absolute_url }}">{{ c.user.username }}</a>
+                            <a href="{{ c.user.get_absolute_url }}">{{ c.user.username }}</a>
                         </div>
                     </div>
 
                     <div class="comment-body">
 
                         <div class="comment-text">
-                            {% if user.st.is_moderator %}
+                            {% if user.is_administrator %}
                                 {{ c.comment_html|safe }}
                             {% else %}
                                 {% trans "This comment was deleted" %}.
@@ -113,9 +113,9 @@
                     </div>
                 </div>
 
-                {% if user.st.is_moderator %}
+                {% if user.is_administrator %}
                     <ul class="comment-actions">
-                        <li><a href="{% url "spirit:comment:undelete" c.pk %}"><i class="fa fa-times"></i> {% trans "undelete" %}</a></li>
+                        <li><a href="{% url 'comment:undelete' c.pk %}"><i class="fa fa-times"></i> {% trans "undelete" %}</a></li>
                     </ul>
                 {% endif %}
 

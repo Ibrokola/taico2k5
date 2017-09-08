@@ -1,0 +1,7 @@
+{% load i18n %}
+
+<form method="get" action="{% url 'search:search' %}">
+    {% include "snippet/form.html" %}
+
+    <input class="button" type="submit" value="{% trans "Search" %}" />
+</form>
