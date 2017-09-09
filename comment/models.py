@@ -11,7 +11,7 @@ from django.utils import timezone
 from django.contrib.auth import get_user_model
 
 from like.models import CommentLike
-from poll.models import CommentPollVote
+from poll.models import CommentPollVote, CommentPollChoice, CommentPoll
 
 # from topic.models import Topic
 
@@ -33,10 +33,9 @@ User = get_user_model()
 
 class CommentQuerySet(models.query.QuerySet):
     """custom query set for comment module"""
-    # def filter(self, *args, **kwargs):
-    #     pass
-        # return super(CommentQuerySet, self).filter(*args, **kwargs)\
-        #     .select_related('user__st')
+    def filter(self, *args, **kwargs):
+        return super(CommentQuerySet, self).filter(*args, **kwargs)\
+            .select_related('user__u')
 
     def unremoved(self):
         return self.filter(
@@ -50,11 +49,14 @@ class CommentQuerySet(models.query.QuerySet):
     def public(self):
         return self.filter(topic__category__is_private=False)
 
+    def for_topic(self, topic):
+        return self.filter(topic=topic)
+
     def visible(self):
         return self.unremoved().public()
 
-    def _access(self, user):
-        return self.filter(Q(topic__category__is_private=False) | Q(topic__topics_private__user=user))
+    # def _access(self, user):
+    #     return self.filter(Q(topic__category__is_private=False) | Q(topic__topics_private__user=user))
 
     def with_likes(self, user):
         if not user.is_authenticated():
@@ -67,7 +69,7 @@ class CommentQuerySet(models.query.QuerySet):
     
     def with_polls(self, user):
         visible_polls = CommentPoll.objects.unremoved()
-        prefetch_polls = Prefetch("polls__poll_choices", queryset=visible_polls, to_attr='choices')
+        prefetch_polls = Prefetch("comment_polls", queryset=visible_polls, to_attr='polls')
 
         #Choices are attached to polls
         visible_choices = CommentPollChoice.objects.unremoved()
@@ -83,11 +85,12 @@ class CommentQuerySet(models.query.QuerySet):
         return self.prefetch_related(prefetch_polls, prefetch_choices, prefetch_votes)
     
     def for_access(self, user):
-        return self.unremoved()._access(user=user)
+        return self.unremoved() #_access(user=user)
     
     def for_update_or_404(self, pk, user):
-        if user.is_moderator:
-            return get_object_or_404(self._access(user=user), pk=pk)
+        if user.u.is_administrator:
+            # return get_object_or_404(self._access(user=user), pk=pk)
+            return get_object_or_404(self.for_access(user=user), pk=pk)
         else:
             return get_object_or_404(self.for_access(user), user=user, pk=pk)
 

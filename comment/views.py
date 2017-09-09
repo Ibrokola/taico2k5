@@ -7,18 +7,18 @@ from django.http import Http404
 from djconfig import config
 
 
-# from core.utils.ratelimit.decorators import ratelimit
-# from core.utils.decorators import moderator_required
-# from core.utils import markdown, paginator, render_form_errors, json_response
+from utils.ratelimit.decorators import ratelimit
+from utils.decorators import administrator_required
+from utils import markdown, paginator, render_form_errors, json_response
 
 from topic.models import Topic
 from .models import Comment
-# from .forms import CommentForm, CommentMoveForm, CommentImageForm
-# from .utils import comment_posted, post_comment_update, pre_comment_update
+from .forms import CommentForm, CommentMoveForm, CommentImageForm
+from .utils import comment_posted, post_comment_update, pre_comment_update
 
 
 @login_required
-# @ratelimit(rate='1/10s')
+@ratelimit(rate='1/10s')
 def publish(request, topic_id, pk=None):
     user = request.user
     topic = get_object_or_404(
@@ -26,7 +26,7 @@ def publish(request, topic_id, pk=None):
         pk=topic_id)
 
     if request.method == 'POST':
-        # form = CommentForm(user=user, topic=topic, data=request.POST)
+        form = CommentForm(user=user, topic=topic, data=request.POST)
 
         if not request.is_limited() and form.is_valid():
             if not user.st.update_post_hash(form.get_comment_hash()):

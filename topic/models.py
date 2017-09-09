@@ -40,7 +40,13 @@ class TopicQuerySet(models.QuerySet):
     def for_category(self, category):
         if category.is_subcategory:
             return self.filter(category=category)
-        return self.filter(Q(catgeory=category) | Q(catgeory__parent=category))
+        return self.filter(Q(category=category) | Q(category__parent=category))
+
+    # def _access(self, user):
+    #     return self.filter(Q(category__is_private=False) | Q(topics_private__user=user))
+
+    def for_access(self, user):
+        return self.unremoved() #._access(user=user)
 
     def with_bookmarks(self, user):
         if not user.is_authenticated():
@@ -52,14 +58,14 @@ class TopicQuerySet(models.QuerySet):
 
     def get_public_or_404(self, pk, user):
         # if user.is_authenticated() and user.st.is_moderator:
-        if user.is_authenticated() and user.is_admin:
+        if user.is_authenticated() and user.u.is_administrator:
             return get_object_or_404(self.public().select_related('category__parent'), pk=pk)
         else:
             return get_object_or_404(self.visible().select_related('category__parent'), pk=pk)
     
 
     def for_update_or_404(self, pk, user):
-        if user.is_moderator:
+        if user.u.is_administrator:
             return get_object_or_404(self.public(), pk=pk)
         else:
             return get_object_or_404(self.visible().opened(), pk=pk, user=user) 
@@ -113,13 +119,24 @@ class Topic(models.Model):
     @property
     def bookmark(self):
         try:
-            assert len(self.bookmarks) <= 1
+            assert len(self.bookmarks) <= 1, "Bookmarks are too much"
             return self.bookmarks[0]
         except (AttributeError, IndexError):
             return 0
+    
 
+    @property
+    def new_comments_count(self):
+        # This may not be accurate since bookmarks requires JS,
+        # without JS only the first comment in a page is marked,
+        # so this counter should be shown running a JS script
+        if not self.bookmark:
+            return 0
+
+        # Comments may have been moved
         return max(0, self.comment_count - self.bookmarks[0].comment_number)
 
+        
     @property
     def has_new_comments(self):
         return self.new_comments_count > 0

@@ -4,10 +4,10 @@ from django.core.files.storage import default_storage
 from django.utils.translation import ugettext_lazy as _
 from django.utils.encoding import smart_bytes
 
-# from core import utils
-# from core.utils.markdown import Markdown
+import utils
+from utils.markdown import Markdown
 from topic.models import Topic
-# from .poll.models import CommentPoll, CommentPollChoice
+from poll.models import CommentPoll, CommentPollChoice
 from .models import Comment
 
 
@@ -54,7 +54,7 @@ class CommentForm(forms.ModelForm):
 
     def _get_comment_html(self):
         user = self.user or self.instance.user
-        markdown = Markdown(no_follow=not user.is_admin)
+        markdown = Markdown(no_follow=not user.u.is_administrator)
         comment_html = markdown.render(self.cleaned_data['comment'])
         self.mentions = markdown.get_mentions()
         self.polls = markdown.get_polls()

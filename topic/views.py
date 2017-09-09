@@ -22,12 +22,14 @@ def discuss(request, category_id=None):
         get_object_or_404(
             Category.objects.visible(), pk=category_id)
 
+    user = request.user    
+
     if request.method == 'POST':
-        form = TopicForm(user=request.user, data=request.POST)
-        com_form = CommentForm(user=request.user, data=request.POST)
+        form = TopicForm(user=user, data=request.POST)
+        com_form = CommentForm(user=user, data=request.POST)
 
         if (all([form.is_valid(), com_form.is_valid()]) and not request.is_limited()):
-            if not request.user.update_post_hash(form.get_topic_hash()):
+            if not user.u.update_post_hash(form.get_topic_hash()):
                 return redirect(
                     request.POST.get('next', None) or 
                     form.get_category().get_absolute_url())
@@ -83,13 +85,20 @@ def detail(request, pk, slug):
 
     topic_utils.topic_viewed(request=request, topic=topic)
 
-    comments = Comment.objects.for_topic(topic=topic).with_likes(user=request.user).order_by('-date')
+    comments = Comment.objects.for_topic(topic=topic).with_likes(user=request.user).with_polls(user=request.user).order_by('-date')
+
+    comments = paginate(
+        comments,
+        # per_page=config.comments_per_page,
+        page_number=request.GET.get('page', 1)
+    )
 
     context = {
         'topic': topic,
         'comments': comments
     }
     template = 'topic/detail.html'
+
 
     return render(request, template, context)
 

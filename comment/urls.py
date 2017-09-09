@@ -7,7 +7,7 @@ urlpatterns = [
     url(r'^(?P<topic_id>\d+)/publish/(?P<pk>\d+)/quote/$', views.publish, name='publish'),
 
     url(r'^(?P<pk>\d+)/update/$', views.update, name='update'),
-    url(r'^(?P<pk>\d+)/find/$', views.find, name='find'),
+    url(r'^(?P<pk>\d+)/find/$', views.find, name='detail'),
     url(r'^(?P<topic_id>\d+)/move/$', views.move, name='move'),
 
     url(r'^(?P<pk>\d+)/delete/$', views.delete, name='delete'),

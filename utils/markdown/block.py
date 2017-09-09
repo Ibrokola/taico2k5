@@ -3,7 +3,7 @@ import copy
 
 import mistune
 
-from parsers.poll import PollParser
+from utils.markdown.parsers.poll import PollParser
 
 
 class BlockGrammar(mistune.BlockGrammar):

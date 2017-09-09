@@ -5,11 +5,16 @@ from django.utils import timezone
 from django.template import defaultfilters
 from django.conf import settings
 
-# from ..core.utils.timezone import timezones
+# from djconfig.forms import ConfigForm
+
+# from utils.timezone import timezones
 from .models import UserProfile
 
 
+
+
 User = get_user_model()
+
 # TIMEZONE_CHOICES = timezones()
 
 
@@ -50,3 +55,14 @@ class UserProfileForm(forms.ModelForm):
         facebook_link = cleaned_data.get("facebook_link")
         twitter_handle = cleaned_data.get("twitter_handle")
         return cleaned_data 
+
+
+# class BasicConfigForm(ConfigForm):
+
+#     site_name = forms.CharField(initial="Spirit", label=_("site name"))
+#     site_description = forms.CharField(initial="", label=_("site description"), max_length=75, required=False)
+#     template_footer = forms.CharField(initial="", label=_("footer snippet"), required=False,
+#                                       widget=forms.Textarea(attrs={'rows': 2, }),
+#                                       help_text=_("This gets rendered just before the footer in your template."))
+#     comments_per_page = forms.IntegerField(initial=20, label=_("comments per page"), min_value=1, max_value=100)
+#     topics_per_page = forms.IntegerField(initial=20, label=_("topics per page"), min_value=1, max_value=100)

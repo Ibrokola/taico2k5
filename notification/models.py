@@ -7,8 +7,8 @@ from django.db import IntegrityError, transaction
 from django.db.models import Q
 
 
-from topic.models import Topic
-from comment.models import Comment  
+# from topic.models import Topic
+# from comment.models import Comment  
 
 
 UNDEFINED, MENTION, COMMENT = range(3)
@@ -35,22 +35,22 @@ class TopicNotificationQuerySet(models.query.QuerySet):
     def read(self, user):
         return self.filter(user=user).update(is_read=True)
 
-class TopicNotificationManager(models.Manager):
-    def get_queryset(self):
-        return TopicNotificationQuerySet(self.model, using=self._db)
+# class TopicNotificationManager(models.Manager):
+#     def get_queryset(self):
+#         return TopicNotificationQuerySet(self.model, using=self._db)
 
 
 class TopicNotification(models.Model):
     '''Notification model for topics and comments on topics'''
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='topic_post_notification')
-    topic = models.ForeignKey(Topic)
-    comment = models.ForeignKey(Comment)
+    topic = models.ForeignKey('topic.Topic')
+    comment = models.ForeignKey('comment.Comment')
     date = models.DateTimeField(default=timezone.now)
     action = models.IntegerField(choices=ACTION_CHOICES, default=UNDEFINED)
     is_read = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)
     
-    objects = TopicNotificationManager()
+    objects = TopicNotificationQuerySet.as_manager()
 
 
     class Meta:
@@ -83,11 +83,11 @@ class TopicNotification(models.Model):
 
     @classmethod 
     def create_maybe(cls, user, comment, is_read=True, action=COMMENT):
-        '''This creates a dummy notitfciation'''
+        #This creates a dummy notitfciation
         return cls.objects.get_or_create(
             user=user,
             topic=comment.topic, 
-            default={
+            defaults={
                 'comment': comment,
                 'action': action,
                 'is_read': is_read,  
