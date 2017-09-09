@@ -29,12 +29,12 @@ class TimezoneMiddleware(MiddlewareMixin):
     def process_request(self, request):
         if request.user.is_authenticated():
             try:
-                timezone.activate(request.user.st.timezone)
+                timezone.activate(request.user.u.timezone)
             except pytz.exceptions.UnknownTimeZoneError:
                 timezone.deactivate()
                 logger.error(
                     '%s is not a valid timezone.' %
-                    request.user.st.timezone)
+                    request.user.u.timezone)
         else:
             timezone.deactivate()
 
@@ -47,7 +47,7 @@ class LastIPMiddleware(MiddlewareMixin):
 
         last_ip = request.META['REMOTE_ADDR'].strip()
 
-        if request.user.st.last_ip == last_ip:
+        if request.user.u.last_ip == last_ip:
             return
 
         (UserProfile.objects.filter(user__pk=request.user.pk).update(last_ip=last_ip))
@@ -59,8 +59,8 @@ class LastSeenMiddleware(MiddlewareMixin):
         if not request.user.is_authenticated():
             return
         
-        threshold = settings.ST_USER_LAST_SEEN_THRESHOLD_MINUTES * 60
-        delta = timezone.now() - request.user.st.last_seen
+        threshold = settings.USER_LAST_SEEN_THRESHOLD_MINUTES * 60
+        delta = timezone.now() - request.user.u.last_seen
 
         if delta.seconds < threshold:
             return
