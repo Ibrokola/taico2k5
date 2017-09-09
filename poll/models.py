@@ -7,7 +7,7 @@ from django.db.models import F, Prefetch
 from django.apps import apps
 
 
-from comment.models import Comment
+# from comment.models import Comment
 
 
 
@@ -55,7 +55,7 @@ class CommentPollQuerySet(models.QuerySet):
 
 class CommentPoll(models.Model):
 
-    comment = models.ForeignKey(Comment, related_name='comment_polls')
+    comment = models.ForeignKey('comment.Comment', related_name='comment_polls')
 
     name = models.CharField(_("name"), max_length=255)
     title = models.CharField(_("title"), max_length=255, blank=True)

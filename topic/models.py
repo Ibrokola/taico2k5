@@ -7,12 +7,17 @@ from django.utils.translation import ugettext_lazy as _
 from django.shortcuts import get_object_or_404
 
 from django.utils import timezone
-from category.models import Category 
+# from category.models import Category 
 from utils.model_fields import AutoSlugField
 
 from bookmark.models import CommentBookmark
 
+from django.contrib.auth import get_user_model
 
+
+User = get_user_model()
+
+# User = settings.AUTH_USER_MODEL
 
 class TopicQuerySet(models.QuerySet):
     def unremoved(self):
@@ -65,10 +70,9 @@ class TopicQuerySet(models.QuerySet):
 
 class Topic(models.Model):
     """This model gives the posts and topics for diffrent discussions started on the forum"""
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='post_author')
-    category = models.ForeignKey(Category, verbose_name=_("category"))
+    user = models.ForeignKey(User, related_name='post_author')
+    category = models.ForeignKey('category.Category', verbose_name=_("category"))
     title = models.CharField(_("title"), max_length=255)
-    # post = models.TextField(max_length=8192, blank=True)
     slug = AutoSlugField(populate_from="title", db_index=False, blank=True)
     date = models.DateTimeField(_("date"), default=timezone.now)
     last_active = models.DateTimeField(_("last active"), default=timezone.now)
@@ -85,6 +89,10 @@ class Topic(models.Model):
     class Meta:
         ordering = ['-last_active', '-pk']
         verbose_name = _("topic")
+
+    def __str__(self):
+        return str(self.title)
+    
 
     def get_absolute_url(self):
         return reverse('topic:detail', kwargs={'pk': str(self.id), 'slug': self.slug})

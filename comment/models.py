@@ -2,13 +2,18 @@ from django.db import models
 
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
+from django.shortcuts import get_object_or_404
 from django.conf import settings 
 from django.db.models import F, Q, Prefetch 
 from django.utils import timezone 
 
-# from like.models import CommentLike
 
-from topic.models import Topic
+from django.contrib.auth import get_user_model
+
+from like.models import CommentLike
+from poll.models import CommentPollVote
+
+# from topic.models import Topic
 
 COMMENT, MOVED, CLOSED, UNCLOSED, PINNED, UNPINNED = range(6)
 
@@ -22,6 +27,9 @@ ACTION = (
     (UNPINNED, _("topic unpinned")),
 )
 
+User = get_user_model()
+
+# User = settings.AUTH_USER_MODEL
 
 class CommentQuerySet(models.query.QuerySet):
     """custom query set for comment module"""
@@ -57,41 +65,41 @@ class CommentQuerySet(models.query.QuerySet):
         return self.prefetch_related(prefetch)
 
     
-    # def with_polls(self, user):
-    #     visible_polls = CommentPoll.objects.unremoved()
-    #     prefetch_polls = Prefetch("polls__poll_choices", queryset=visible_polls, to_attr='choices')
+    def with_polls(self, user):
+        visible_polls = CommentPoll.objects.unremoved()
+        prefetch_polls = Prefetch("polls__poll_choices", queryset=visible_polls, to_attr='choices')
 
-    #     #Choices are attached to polls
-    #     visible_choices = CommentPollChoice.objects.unremoved()
-    #     prefetch_choices = Prefetch("polls__poll_choices", queryset=visible_choice, to_attr='choices')
+        #Choices are attached to polls
+        visible_choices = CommentPollChoice.objects.unremoved()
+        prefetch_choices = Prefetch("polls__poll_choices", queryset=visible_choices, to_attr='choices')
 
-    #     if not user.is_authenticated():
-    #         return self.prefetch_related(prefetch_polls, prefetch_choices)
+        if not user.is_authenticated():
+            return self.prefetch_related(prefetch_polls, prefetch_choices)
 
-    #     #Votes are attached to choices
-    #     visible_votes = CommentPollVote.objects.unremoved().for_voter(user)
-    #     prefetch_votes = Prefetch("polls__choices__choice_votes", queryset=visible_votes, to_attr='votes')
+        #Votes are attached to choices
+        visible_votes = CommentPollVote.objects.unremoved().for_voter(user)
+        prefetch_votes = Prefetch("polls__choices__choice_votes", queryset=visible_votes, to_attr='votes')
 
-    #     return self.prefetch_related(prefetch_polls, prefetch_choices, prefetch_votes)
+        return self.prefetch_related(prefetch_polls, prefetch_choices, prefetch_votes)
     
-    # def for_access(self):
-    #     return self.unremoved()._access(user=user)
+    def for_access(self, user):
+        return self.unremoved()._access(user=user)
     
-    # def for_update_or_404(self):
-    #     if user.is_moderator:
-    #         return get_object_or_404(self._access(user=user), pk=pk)
-    #     else:
-    #         return get_object_or_404(self.for_access(user), user=user, pk=pk)
+    def for_update_or_404(self, pk, user):
+        if user.is_moderator:
+            return get_object_or_404(self._access(user=user), pk=pk)
+        else:
+            return get_object_or_404(self.for_access(user), user=user, pk=pk)
 
-class CommentManager(models.Manager):
-    def get_queryset(self):
-        return CommentQuerySet(self.model, using=self._db)
+# class CommentManager(models.Manager):
+#     def get_queryset(self):
+#         return CommentQuerySet(self.model, using=self._db)
 
 
 class Comment(models.Model):
     """ Comment model """
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='post_comment_author')
-    topic = models.ForeignKey(Topic)
+    user = models.ForeignKey(User, related_name='post_comment_author')
+    topic = models.ForeignKey('topic.Topic')
     comment = models.TextField(_("comment"), max_length=8300)
     comment_html = models.TextField(_("comment html"))
     action = models.IntegerField(_("action"), choices=ACTION, default=COMMENT)
@@ -102,7 +110,7 @@ class Comment(models.Model):
     modified_count = models.PositiveIntegerField(_("modified count"), default=0)
     likes_count = models.PositiveIntegerField(_("likes count"), default=0)
 
-    objects = CommentManager()
+    objects = CommentQuerySet.as_manager()
 
     class Meta:
         ordering = ['-date', '-pk']
@@ -111,6 +119,9 @@ class Comment(models.Model):
 
     def get_absolute_url(self):
         return reverse('comment:detail', kwargs={'pk': str(self.id), })
+
+    def __str__(self):
+        return str(self.comment)
 
     @property
     def like(self):

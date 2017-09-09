@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from django.http import HttpResponse
 from django.db import models
 from django.core.urlresolvers import reverse
@@ -11,6 +13,8 @@ from django.template.loader import render_to_string, get_template
 from django.shortcuts import render
 from django.core.mail import EmailMessage
 
+from django.contrib.auth import get_user_model
+
 from utils.models import AutoSlugField
 
 
@@ -18,7 +22,9 @@ from django.db.models.signals import post_save
 # from django.contrib.auth import get_user_model
 
 
-User = settings.AUTH_USER_MODEL
+User = get_user_model()
+
+# User = settings.AUTH_USER_MODEL
 
 
 def new_user_reciever(sender, instance, created, **kwargs):
@@ -52,7 +58,7 @@ post_save.connect(new_user_reciever, sender=User)
 # dispatch_uid=__name__
 
 class UserProfile(models.Model):
-    user = models.OneToOneField(User, verbose_name=_("profile"), related_name='u')
+    user = models.OneToOneField(User, related_name='u') #verbose_name=_("profile")
     image = models.ImageField(upload_to='images/', null=True, blank=True)
     slug = AutoSlugField(populate_from="user.username", db_index=False, blank=True)
     grad_year = models.PositiveIntegerField(default=0)
