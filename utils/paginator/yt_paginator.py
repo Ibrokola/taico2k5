@@ -48,7 +48,7 @@ class YTPage(object):
         self.number = number
         self.paginator = paginator
         self._num_pages = None
-        self._max_pages = settings.ST_YT_PAGINATOR_PAGE_RANGE * 2 + 1
+        self._max_pages = settings.YT_PAGINATOR_PAGE_RANGE * 2 + 1
 
     def __repr__(self):
         return '<Page %s>' % self.number

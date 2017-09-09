@@ -6,6 +6,8 @@ from django.utils import timezone
 
 from django.db.models import Q
 
+from utils.model_fields import AutoSlugField
+# from utils.models import AutoSlugField
 
 class CategoryQuerySet(models.query.QuerySet):
 
@@ -40,7 +42,7 @@ class CategoryQuerySet(models.query.QuerySet):
 class Category(models.Model):
     parent = models.ForeignKey('self', verbose_name=_("category parent"), null=True, blank=True)
     title = models.CharField(_("title"), max_length=75)
-    # slug = AutoSlugField(populate_from="title", db_index=False, blank=True)
+    slug = AutoSlugField(populate_from="title", db_index=False, blank=True)
     description = models.CharField(_("description"), max_length=255, blank=True)
     color = models.CharField(_("color"), max_length=7, blank=True,
                              help_text=_("Title color in hex format (i.e: #1aafd0)."))
