@@ -8,7 +8,7 @@ from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 
 from .forms import AdvancedSearchForm
-# from core.utils.paginator import yt_paginate
+from utils.paginator import yt_paginate
 
 
 class SearchView(BaseSearchView):
@@ -33,9 +33,10 @@ class SearchView(BaseSearchView):
 
     def build_page(self):
         paginator = None
+        topics_per_page = 15
         page = yt_paginate(
             self.results,
-            per_page=config.topics_per_page,
+            per_page=topics_per_page,
             page_number=self.request.GET.get('page', 1))
         page = [
             {'fields': r.get_stored_fields(), 'pk': r.pk}

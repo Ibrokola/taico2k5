@@ -6,8 +6,15 @@
 
 
 {% block content %}
-<div class="container-fluid">
+<div class="jumbotron jumbotron-fluid" style="padding-bottom: 60px; padding-top: -50px;">
+    <div class="container">
+        <!-- <h1 class="display-3">Fluid jumbotron</h1>
+        <p class="lead">This is a modified jumbotron that occupies the entire horizontal space of its parent.</p> -->
+    </div>
+</div>
+<div class="container">
     <div style="margin-top: 100px;"></div>
+    <!-- replace with breadcrumbs -->
     <ul class="nav">
         <li><a href="{% url 'home' %}" >{% trans "Main" %}</a><i class="fa fa-chevron-right"></i></li>
 
@@ -17,6 +24,7 @@
 
         <li><a href="{{ topic.category.get_absolute_url }}" >{{ topic.category.title }}</a></li>
     </ul>
+    <!-- //Replace End -->
     <h1 class="headline">
         {% if topic.is_pinned or topic.is_globally_pinned %}
             <i class="fa fa-thumb-tack"></i>
@@ -27,13 +35,13 @@
 
         {{ topic.title }}
 
-        {% if user.is_admin %}
+        {% if user.u.is_administrator %}
             <a class="head-edit-link" href="{% url 'topic:update' topic.pk %}"><i class="fa fa-pencil"></i> {% trans "edit" %}</a>
         {% elif user.pk == topic.user.pk and not topic.is_closed %}
             <a class="head-edit-link" href="{% url 'topic:update' topic.pk %}"><i class="fa fa-pencil"></i> {% trans "edit" %}</a>
         {% endif %}
     </h1>
-    {% if user.is_admin %}
+    {% if user.u.is_administrator %}
     <div class="move-comments" style="display:none;">
         <div class="move-container">
             <label class="move-label">{% trans "Topic id" %}:</label>
@@ -46,52 +54,51 @@
     <div class="container">
         {% render_paginator page=comments %}
 
-        <div class="notify">
+        <div class="notify float-right">
             {% if user.is_authenticated %}
                 {% render_notification_form user=user topic=topic %}
             {% elif not topic.is_closed %}
-                <a class="btn btn-default btn-sm" href="{% url 'comment:publish' topic_id=topic.pk %}">{% trans "Reply" %}</a>
+                <a class="btn btn-default btn-sm" href="{% url 'comment:publish' topic_id=topic.pk %}">{% trans "Post" %}</a>
             {% endif %}
         </div>
     </div>
-</div>
 
 
+    {% if user.is_authenticated %}
+    {% if not topic.is_closed %}
+        <div id="reply" class="reply">
 
-{% if user.is_authenticated %}
-{% if not topic.is_closed %}
-    <div id="reply" class="reply">
+            <div class="comment-media">
+                <div class="comment-img">
+                    <img class="comment-avatar" src="{# get_gravatar_url user=user size=50 #}" />
+                </div>
 
-        <div class="comment-media">
-            <div class="comment-img">
-                <img class="comment-avatar" src="{# get_gravatar_url user=user size=50 #}" />
+                <div class="comment-body">
+                    {% render_comments_form topic=topic %}
+                </div>
             </div>
 
-            <div class="comment-body">
-                {% render_comments_form topic=topic %}
-            </div>
         </div>
+    {% endif %}
 
-    </div>
-{% endif %}
+    <script>
+        $( document ).ready(function() {
 
-<script>
-    $( document ).ready(function() {
-
-        $( ".comment" ).bookmark( {
-            csrfToken: "{{ csrf_token }}",
-            target: "{% url 'bookmark:create' topic.pk %}",
-        } );
-
-
-        {% if user.is_admin %}
-            $('.js-show-move-comments').move_comments( {
+            $( ".comment" ).bookmark( {
                 csrfToken: "{{ csrf_token }}",
-                target: "{% url "comment:move" topic.pk %}",
+                target: "{% url 'bookmark:create' topic.pk %}",
             } );
-        {% endif %}
 
-    });
-</script>
-{% endif %}
+
+            {% if user.u.is_administrator %}
+                $('.js-show-move-comments').move_comments( {
+                    csrfToken: "{{ csrf_token }}",
+                    target: "{% url 'comment:move' topic.pk %}",
+                } );
+            {% endif %}
+
+        });
+    </script>
+    {% endif %}
+</div>
 {% endblock %}

@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+
+{% block title %}{% trans "Delete comment" %}{% endblock %}
+
+{% block content %}
+
+    <h1 class="headline">{% trans "Delete comment" %}</h1>
+    
+    <form action="." method="post">
+        {% csrf_token %}
+
+        <input class="button" type="submit" name="post" value="{% trans "Apply" %}" />
+    </form>
+
+{% endblock %}

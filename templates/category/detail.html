@@ -5,11 +5,19 @@
 {% block title %}{{ category.title }}{% endblock %}
 
 {% block content %}
+<div class="jumbotron jumbotron-fluid" style="padding-bottom: 60px; padding-top: -50px;">
+    <div class="container">
+        <!-- <h1 class="display-3">Fluid jumbotron</h1>
+        <p class="lead">This is a modified jumbotron that occupies the entire horizontal space of its parent.</p> -->
+    </div>
+</div>
+<div class="container">
+    <div class="col-sm-8">
+        {% include "topic/_top_bar.html" with category=category categories=subcategories %}
 
-    {% include "topic/_top_bar.html" with category=category categories=subcategories %}
+        {% include "topic/_render_list.html" with show_subcategory=True %}
 
-    {% include "topic/_render_list.html" with show_subcategory=True %}
-
-    {% render_paginator topics %}
-
+        {% render_paginator topics %}
+    </div>
+</div>
 {% endblock %}

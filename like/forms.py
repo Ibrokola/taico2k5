@@ -10,23 +10,23 @@ class LikeForm(forms.ModelForm):
         model = CommentLike
         fields = []
 
-        def __init__(self, user=None, comment=None, *args, **kwargs):
-            super(LikeForm, self).__init__(*args, **kwargs)
-            self.user = user 
-            self.comment = comment
+    def __init__(self, user=None, comment=None, *args, **kwargs):
+        super(LikeForm, self).__init__(*args, **kwargs)
+        self.user = user 
+        self.comment = comment
 
-        def clean(self):
-            cleaned_data = super(LikeForm, self).clean()
+    def clean(self):
+        cleaned_data = super(LikeForm, self).clean()
 
-            like = CommentLike.objects.filter(user=self.user, comment=self.comment)
+        like = CommentLike.objects.filter(user=self.user, comment=self.comment)
 
-            if like.exists():
-                raise forms.ValidationError(_("You liked this already"))
-            return cleaned_data 
+        if like.exists():
+            raise forms.ValidationError(_("You liked this already"))
+        return cleaned_data 
 
-        def save(self, commit=True):
-            if not self.instance.pk:
-                self.instance.user = self.user 
-                self.instance.comment = self.comment 
+    def save(self, commit=True):
+        if not self.instance.pk:
+            self.instance.user = self.user 
+            self.instance.comment = self.comment 
 
-            return super(LikeForm, self).save(commit)
+        return super(LikeForm, self).save(commit)

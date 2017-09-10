@@ -6,7 +6,7 @@ from django.views.generic import ListView
 
 from djconfig import config 
 
-# from core.utils.paginator import yt_paginate
+from utils.paginator import yt_paginate
 from topic.models import Topic
 from .models import Category
 
@@ -28,12 +28,13 @@ def detail(request, pk, slug):
     subcategories = Category.objects.visible().children(parent=category)
 
     topics = Topic.objects.unremoved().with_bookmarks(user=request.user).for_category(category=category).order_by('-is_globally_pinned', '-is_pinned', '-last_active').select_related('category')
-
-    # topics = yt_paginate(
-    #     topics,
-    #     per_page=config.topics_per_page,
-    #     page_number=request.GET.get('page', 1)
-    # )
+    topics_per_page = 15
+    
+    topics = yt_paginate(
+        topics,
+        per_page=topics_per_page,
+        page_number=request.GET.get('page', 1)
+    )
 
     context = {
         'category': category,

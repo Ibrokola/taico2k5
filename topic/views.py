@@ -106,11 +106,11 @@ def detail(request, pk, slug):
 def index_active(request):
     categories = Category.objects.visible().parents()
     
-    topics = Topic.objects.visible().global_().order_by('-is_globally_pinned', '-last_active').select_related('category')
-
+    topics = Topic.objects.visible().global_().with_bookmarks(user=request.user).order_by('-is_globally_pinned', '-last_active').select_related('category')
+    topics_per_page = 15
     topics = yt_paginate(
         topics,
-        # per_page=config.topics_per_page,
+        per_page=topics_per_page,
         page_number=request.GET.get('page', 1)
     )
 

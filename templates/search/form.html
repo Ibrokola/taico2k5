@@ -1,7 +1,10 @@
 {% load i18n %}
+{% load crispy_forms_tags %}
 
 <form method="get" action="{% url 'search:search' %}">
-    {% include "snippet/form.html" %}
+    {# include "snippet/form.html" #}
+
+    {{ form|crispy }}
 
     <input class="button" type="submit" value="{% trans "Search" %}" />
 </form>

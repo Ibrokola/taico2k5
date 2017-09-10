@@ -1,7 +1,7 @@
 {% load i18n %}
     {% for n in notifications %}
         <div class="row">
-            {% url "user:detail" pk=n.comment.user.pk slug=n.comment.user.slug as url_profile %}
+            {% url "user:detail" pk=n.comment.user.pk slug=n.comment.user.u.slug as url_profile %}
             {% url "comment:find" pk=n.comment.pk as url_topic %}
 
             {% if n.is_comment %}

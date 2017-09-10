@@ -1,17 +1,17 @@
 {% load static %}
 {% load thomas_tags i18n %}
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <meta charset="utf-8" />
+    <meta charset="UTF-8" />
     <link rel="icon" type="image/png" href="img/favicon.ico">
     <link rel="apple-touch-icon" sizes="76x76" href="img/apple-icon.png">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 
     <title>{% block title %}TAICO Alumni Forum{% endblock %}</title>
 
-    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport'>
     <meta name="viewport" content="width=device-width" />
 
     <!-- Meta OG -->
@@ -40,6 +40,359 @@
     <link href='https://fonts.googleapis.com/css?family=Montserrat:400,300,700' rel='stylesheet' type='text/css'>
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
     <link href="{% static 'css/nucleo-icons.css' %}" rel="stylesheet" />
+
+    <style>
+        .row-title {
+            float: left;
+            display: block;
+            margin-right: 7.42297%;
+            width: 100%;
+            margin-bottom: 12px; }
+        .row-title:last-child {
+            margin-right: 0; }
+        @media screen and (min-width: 768px) {
+            .row-title {
+            float: left;
+            display: block;
+            margin-right: 3.57866%;
+            width: 48.21067%;
+            margin-bottom: 0; }
+            .row-title:last-child {
+                margin-right: 0; } }
+    
+        .row-link {
+            color: #444444; 
+        }
+        .row-link:visited, .row-link.is-visited {
+            color: #979797; 
+        }
+        .row-info div {
+        display: inline-block;
+        *display: inline;
+        zoom: 1; 
+        }
+    
+    .row-info {
+        float: left;
+        display: block;
+        margin-right: 7.42297%;
+        width: 100%;
+        color: #979797; }
+    .row-info:last-child {
+        margin-right: 0; }
+    .row-info div {
+        margin-left: 24px; }
+        .row-info div:first-child {
+        margin-left: 0; }
+    .row-info .is-new {
+        color: #c65555; }
+    @media screen and (min-width: 768px) {
+        .row-info {
+        float: left;
+        display: block;
+        margin-right: 3.57866%;
+        width: 48.21067%;
+        text-align: right; }
+        .row-info:last-child {
+            margin-right: 0; } }
+    
+    .rows {
+        margin-bottom: 24px; }
+    
+    .row::after{
+        clear: both;
+        content: "";
+        display: table;
+    }
+    
+    .row{
+        padding: 12px;
+        border-top: #cecece 1px solid;
+    }
+    
+    .new-topic {
+        float: left;
+        display: block;
+        margin-right: 7.42297%;
+        width: 100%; }
+    .new-topic:last-child {
+        margin-right: 0; }
+    @media screen and (min-width: 768px) {
+        .new-topic {
+        float: left;
+        display: block;
+        margin-right: 3.57866%;
+    /*    width: 48.21067%; */
+        text-align: right; }
+        .new-topic:last-child {
+            margin-right: 0; } }
+
+.headline {
+    font-weight: normal; }
+
+.head-edit-link {
+    font-size: 14px; }
+
+.move-comments {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 1;
+    display: block;
+    width: 100%;
+    background: #cecece;
+    padding: 6px 0; }
+
+
+.notify {
+    margin-bottom: 48px; } 
+
+
+@media screen and (min-width: 768px) {
+    .notify {
+    float: left;
+    display: block;
+    margin-right: 3.57866%; 
+   /* width: 48.21067%;  */
+    text-align: right; }
+    .notify:last-child {
+    margin-right: 0; } }
+
+.comment-media::after, .container::after,
+.header::after, .row::after,
+.comment::after, .comment-info::after, .menu-item::after {
+    clear: both;
+    content: "";
+    display: table; }
+
+.comment-img {
+    float: left; }
+
+.comment-img {
+    width: 50px;
+    margin-right: 24px; }
+
+.comment-avatar {
+    border-radius: 25px; }
+
+.comment-body {
+    overflow: hidden; }
+
+.comment-media::after, .container::after,
+.header::after, .row::after,
+.comment::after, .comment-info::after, .menu-item::after {
+    clear: both;
+    content: "";
+    display: table; }
+
+.inline-list li,
+.tabs li,
+.admin-tabs li,
+.header-tabs li,
+.nav li,
+.comment-date li,
+.comment-actions li,
+.paginator li,
+.reply-markdown li,
+.share-actions li,
+.profile-track li, .row-info div {
+    display: inline-block;
+    *display: inline;
+    zoom: 1; }
+
+
+.comment-date li,
+.comment-actions li,
+.paginator li,
+.reply-markdown li,
+.share-actions li,
+.profile-track li, .row-info div {
+    display: inline-block;
+    *display: inline;
+    zoom: 1; }
+
+.inline-list li,
+.tabs li,
+.admin-tabs li,
+.header-tabs li,
+.nav li,
+.comment-date li,
+.comment-actions li,
+.paginator li,
+.reply-markdown li,
+.share-actions li,
+.profile-track li {
+    margin-left: 12px; }
+
+    .inline-list li:first-child,
+.tabs li:first-child,
+.admin-tabs li:first-child,
+.header-tabs li:first-child,
+.nav li:first-child,
+.comment-date li:first-child,
+.comment-actions li:first-child,
+.paginator li:first-child,
+.reply-markdown li:first-child,
+.share-actions li:first-child,
+.profile-track li:first-child {
+margin-left: 0; }
+
+.comment-img {
+    float: left; }
+  
+.comment-body {
+overflow: hidden; }
+
+.comment {
+    padding: 12px;
+    border-top: #cecece 1px solid; }
+.row:last-child,
+.comment:last-child {
+    border-bottom: #cecece 1px solid; }
+
+
+.comments {
+    margin-bottom: 24px; }
+    
+.comment.is-highlighted {
+background: #ffffe9; }
+
+.comment-img {
+width: 50px;
+margin-right: 24px; }
+
+.comment-avatar {
+border-radius: 25px; }
+
+.comment-info {
+font-size: 14px;
+margin-bottom: 12px; }
+
+.comment-username {
+float: left; }
+
+.comment-date {
+float: right; }
+
+.comment-realname {
+display: none; }
+@media screen and (min-width: 768px) {
+    .comment-realname {
+    display: inline;
+    margin-left: 12px; } }
+    
+.comment-text blockquote {
+margin: 0;
+border-left: #cecece 4px solid;
+padding-left: 24px; }
+.comment-text ul {
+list-style-type: disc;
+list-style-position: inside;
+margin-left: 40px;
+margin-bottom: 24px; }
+.comment-text img {
+vertical-align: text-bottom; }
+.comment-text ins {
+background-color: #EAFFEA;
+text-decoration: none; }
+.comment-text del {
+background-color: #FFECEC;
+text-decoration: none; }
+
+.comment-actions {
+font-size: 14px;
+text-align: right; }
+
+.comment-removed {
+font-size: 14px;
+word-wrap: break-word; }
+
+.reply-markdown {
+    margin-bottom: 24px; }
+    @media screen and (min-width: 768px) {
+      .reply-markdown {
+        float: left; } }
+    .reply-markdown li {
+      margin-left: 24px; }
+  
+ul.reply-markdown {
+/* reset */
+list-style: none;
+margin-left: 0; }
+
+.inline-list li,
+.tabs li,
+.admin-tabs li,
+.header-tabs li,
+.nav li,
+.comment-date li,
+.comment-actions li,
+.paginator li,
+.reply-markdown li,
+.share-actions li,
+.profile-track li, .row-info div {
+  display: inline-block;
+  *display: inline;
+  zoom: 1; }
+
+.inline-list li,
+.tabs li,
+.admin-tabs li,
+.header-tabs li,
+.nav li,
+.comment-date li,
+.comment-actions li,
+.paginator li,
+.reply-markdown li,
+.share-actions li,
+.profile-track li {
+margin-left: 12px; }
+.inline-list li:first-child,
+.tabs li:first-child,
+.admin-tabs li:first-child,
+.header-tabs li:first-child,
+.nav li:first-child,
+.comment-date li:first-child,
+.comment-actions li:first-child,
+.paginator li:first-child,
+.reply-markdown li:first-child,
+.share-actions li:first-child,
+.profile-track li:first-child {
+    margin-left: 0; }
+
+.row-unread {
+    font-size: 9.88854px;
+    background-color: #e2f5fc; 
+}
+
+.paginator {
+    margin-bottom: 24px; }
+    @media screen and (min-width: 768px) {
+      .paginator {
+        float: left;
+        display: block;
+        margin-right: 3.57866%;
+       /* width: 48.21067%; */
+    }
+        .paginator:last-child {
+          margin-right: 0; } }
+  
+.paginator-button {
+display: block;
+padding: 4px 12px;
+border: #cecece 1px solid; }
+
+.reply-markdown li {
+    display: inline-block;
+    *display: inline;
+    zoom: 1; 
+    margin-left: 12px;
+}
+
+</style> 
+
+    
+
 
     <script type="text/javascript">
         !function(name,path,ctx){

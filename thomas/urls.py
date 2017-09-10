@@ -16,6 +16,7 @@ urlpatterns = [
     url(r'^search/', include('search.urls', namespace='search')),
     url(r'^poll/', include('poll.urls', namespace='poll')),
     url(r'^favorite/', include('favorite.urls', namespace='favorite')),
+    url(r'^like/', include('like.urls', namespace='like')),
     url(r'^notification/', include('notification.urls', namespace='notification')),
     url(r'^unread/', include('unread.urls', namespace='unread')),
     url(r'^u/', include('user.urls', namespace='user')),

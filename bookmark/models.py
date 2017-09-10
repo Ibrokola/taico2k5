@@ -16,7 +16,6 @@ class CommentBookmark(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='comment_bookmarks')
     topic = models.ForeignKey('topic.Topic')
 
-    # comments_per_page = models.IntegerField(default=20, validators=[MinValueValidator(20), MaxValueValidator(100)] ,verbose_name=_("comments per page"))
     comment_number = models.PositiveIntegerField(default=0)
 
     class Meta:
@@ -43,12 +42,13 @@ class CommentBookmark(models.Model):
 
     @staticmethod
     def page_to_comment_number(page_number):
+        comments_per_page = 15
         try:
             page_number = int(page_number)
         except ValueError:
             return
 
-        return (page_number - 1) + 1 #config.comments_per_page * 
+        return comments_per_page * (page_number - 1) + 1 #config.comments_per_page * 
 
     @classmethod
     def update_or_create(cls, user, topic, comment_number):

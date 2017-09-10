@@ -29,7 +29,7 @@ def publish(request, topic_id, pk=None):
         form = CommentForm(user=user, topic=topic, data=request.POST)
 
         if not request.is_limited() and form.is_valid():
-            if not user.st.update_post_hash(form.get_comment_hash()):
+            if not user.u.update_post_hash(form.get_comment_hash()):
                 # Hashed comment may be in the process of been saved
                 return redirect(
                     request.POST.get('next', None) or
@@ -115,9 +115,10 @@ def move(request, topic_id):
 def find(request, pk):
     comment = get_object_or_404(Comment, pk=pk)
     comment_number = Comment.objects.filter(topic=comment.topic, date__lte=comment.date).count()
+    comments_per_page = 25
     url = paginator.get_url(comment.topic.get_absolute_url(),
                             comment_number,
-                            config.comments_per_page,
+                            comments_per_page,
                             'page')
     return redirect(url)
 

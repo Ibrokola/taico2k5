@@ -2,14 +2,28 @@
 
 {% load thomas_tags i18n %}
 
-{% block title %}{% trans "Latest active discussions" %}{% endblock %}
+{% block title %}{% trans "Active topics" %}{% endblock %}
+{% block head-extra %}
+{% endblock %}
 
 {% block content %}
-<div class="conatainer">
-    {% include "topic/_top_bar.html" with category=None categories=categories %}
+<div class="jumbotron jumbotron-fluid" style="padding-bottom: 60px; padding-top: -50px;">
+    <div class="container">
+        <!-- <h1 class="display-3">Fluid jumbotron</h1>
+        <p class="lead">This is a modified jumbotron that occupies the entire horizontal space of its parent.</p> -->
+    </div>
+</div>
+<div class="container">
+    <div class="col-sm-8">
+            <h4 class="h4-responsive">Welcome <strong>{{ user.username }}</strong>, here are the latest posts 
+                <small><span class="float-right">{% include "topic/_top_bar.html" with category=None categories=categories %}</span></small>
+            </h4>
 
-    {% include "topic/_render_list.html" %}
+        {% include "topic/_render_list.html" %}
+    </div>
+    <div class="col-sm-4 hidden-md-down">
 
+    </div>
     {% render_paginator topics %}
 </div>
 {% endblock %}
