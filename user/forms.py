@@ -7,7 +7,7 @@ from django.conf import settings
 
 # from djconfig.forms import ConfigForm
 
-# from utils.timezone import timezones
+from utils.timezone import timezones
 from .models import UserProfile
 
 
@@ -15,7 +15,7 @@ from .models import UserProfile
 
 User = get_user_model()
 
-# TIMEZONE_CHOICES = timezones()
+TIMEZONE_CHOICES = timezones()
 
 
 class UserForm(forms.ModelForm):
@@ -27,7 +27,7 @@ class UserForm(forms.ModelForm):
 
 class UserProfileForm(forms.ModelForm):
 
-    # timezone = forms.ChoiceField(label=_("Time zone"), choices=TIMEZONE_CHOICES)
+    timezone = forms.ChoiceField(label=_("Time zone"), choices=TIMEZONE_CHOICES)
 
     class Meta:
         model = UserProfile
@@ -35,18 +35,20 @@ class UserProfileForm(forms.ModelForm):
         labels = {
             'image': 'Avatar',
             'bio': 'Brief bio',
+            'grad_year': 'Graduation year',
+            'contact_no': 'Phone contact',
             'website_link': 'Your website page link',
             'facebook_link': 'Your facebook page link',
             'twitter_handle': 'Your twitter page link',
         }
 
-    # def __init__(self, *args, **kwargs):
-    #     super(UserProfileForm, self).__init__(*args, **kwargs)
-    #     now = timezone.localtime(timezone.now())
-    #     self.fields['timezone'].help_text = _('Current time is: %(date)s %(time)s') % {
-    #         'date': defaultfilters.date(now),
-    #         'time': defaultfilters.time(now)
-    #     }
+    def __init__(self, *args, **kwargs):
+        super(UserProfileForm, self).__init__(*args, **kwargs)
+        now = timezone.localtime(timezone.now())
+        self.fields['timezone'].help_text = _('Current time is: %(date)s %(time)s') % {
+            'date': defaultfilters.date(now),
+            'time': defaultfilters.time(now)
+        }
     
     def clean(self, *args, **kwargs):
         cleaned_data = super(UserProfileForm, self).clean(*args, **kwargs)

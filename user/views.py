@@ -21,7 +21,7 @@ User = get_user_model()
 def update(request):
     if request.method == 'POST':
         uform = UserForm(data=request.POST, instance=request.user)
-        form = UserProfileForm(data=request.POST, instance=request.user.st)
+        form = UserProfileForm(data=request.POST, instance=request.user.u)
 
         if all([uform.is_valid(), form.is_valid()]): #uform.is_valid(),   
             uform.save()
@@ -30,11 +30,11 @@ def update(request):
             return redirect(reverse('user:update'))
     else:
         uform = UserForm(instance=request.user)
-        form = UserProfileForm(instance=request.user)
+        form = UserProfileForm(instance=request.user.u)
 
     context = {
         'form': form,
-        # 'uform': uform
+        'uform': uform
     }
     template = 'user/profile_update.html'
     return render(request, template, context)
@@ -44,15 +44,15 @@ def update(request):
 def _activity(request, pk, slug, queryset, template, reverse_to, context_name, per_page):
     p_user = get_object_or_404(User, pk=pk)
 
-    if p_user.slug != slug:
-        url = reverse(reverse_to, kwargs={'pk': p_user.pk, 'slug': p_user.slug})
+    if p_user.u.slug != slug:
+        url = reverse(reverse_to, kwargs={'pk': p_user.pk, 'slug': p_user.u.slug})
         return HttpResponsePermanentRedirect(url)
 
-    # items = yt_paginate(
-    #     queryset,
-    #     per_page=per_page,
-    #     page_number=request.GET.get('page', 1)
-    # )
+    items = yt_paginate(
+        queryset,
+        per_page=per_page,
+        page_number=request.GET.get('page', 1)
+    )
 
     context = {
         'p_user': p_user,
@@ -64,40 +64,40 @@ def _activity(request, pk, slug, queryset, template, reverse_to, context_name, p
 
 def topics(request, pk, slug):
     user_topics = Topic.objects.visible().filter(user_id=pk).order_by('-date', '-pk').select_related('user')
-
+    topics_per_page = 15
     return _activity(
         request, pk, slug,
         queryset=user_topics,
         template='user/profile_topics.html',
         reverse_to='user:topics',
         context_name='topics',
-        per_page=config.topics_per_page
+        per_page=topics_per_page
     )
 
 
 def comments(request, pk, slug):
-    user_comments = Comment.objects.filter(user_id=pk).visible().with_likes(user=request.user)
-    #.with_polls(user=request.user)
+    user_comments = Comment.objects.filter(user_id=pk).visible().with_likes(user=request.user).with_polls(user=request.user)
+    comments_per_page = 15
     return _activity(
         request, pk, slug,
         queryset=user_comments,
         template='user/profile_comments.html',
         reverse_to='user:detail',
         context_name='comments',
-        per_page=config.comments_per_page,
+        per_page=comments_per_page,
     )
 
 
 def likes(request, pk, slug):
-    user_comments = Comment.objects.filter(comment_likes__user_id=pk).visible().with_likes(user=request.user).order_by('-comment_likes__date', '-pk')
-    # with_polls(user=request.user)
+    user_comments = Comment.objects.filter(comment_likes__user_id=pk).visible().with_likes(user=request.user).order_by('-comment_likes__date', '-pk').with_polls(user=request.user)
+    comments_per_page = 15
     return _activity(
         request, pk, slug,
         queryset=user_comments,
         template='user/profile_likes.html',
         reverse_to='user:likes',
         context_name='comments',
-        per_page=config.comments_per_page,
+        per_page=comments_per_page,
     )
 
 

@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% load thomas_tags i18n tz %}
+
+{% block title %}{{ p_user.username }} {% trans "comments" %}{% endblock %}
+
+{% block content %}
+    {% include "user/_profile.html" with active_tab=0 %}
+
+    <div class="container">
+        {% include "user/_render_comments_list.html" %}
+
+        {% render_paginator comments %}
+    </div>
+{% endblock %}

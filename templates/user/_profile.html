@@ -1,0 +1,75 @@
+{% load thomas_tags i18n %}
+{% load static %}
+
+<div class="wrapper">
+    <div class="page-header page-header-xs" data-parallax="true" style="background-image: url('{% static 'img/fabio-mangione.jpg' %}');">
+        <div class="filter"></div>
+    </div>
+    <!-- <div class="profile-img">
+		<img class="profile-avatar" src="{# get_gravatar_url user=p_user size=200 #}" />
+		<div class="profile-username">{{ p_user.username }}</div>
+	</div> -->
+    <div class="section profile-content">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6 col-md-4">
+                    <div class="owner">
+                        <div class="avatar">
+                            {% if p_user.u.image %}
+                                <img src="{{ p_user.u.image.url }}" class="img-fluid img-thumbnail img-no-padding img-responsive" width="400" height="400" alt="profie.picture">
+                            {% else %}
+                                <img src="http://www.sbsc.in/images/dummy-profile-pic.png" class="img-fluid img-thumbnail" width="400" height="400" alt="profie.picture">    
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="card-block">
+                        <h4 class="card-title title"><strong>Username: {{ p_user.username }}</strong></h4>
+                        <hr>
+                        <p>{% trans "Last seen" %}: {{ p_user.u.last_seen|shortnaturaltime }} </p>
+                        <p>{% trans "Joined" %}: {{ p_user.date_joined|shortnaturaltime }}</p>
+                        <p>{% trans "Grad year" %}: {{ p_user.u.grad_year }}</p>
+                        <p>{% trans "Contact No." %}: {{ p_user.u.contact_no }}</p>
+                        <p>{% trans "Location" %}: {{ p_user.u.location }}</p>
+                        
+                        {% if p_user.u.facebook_link or p_user.u.twitter_handle or p_user.u.website_link %}
+						<h4>Connect with {{ p_user.username }}</h4>
+							{% if p_user.u.facebook_link %}
+							<span><a class="btn-floating btn-small btn-fb" href="{{ p_user.u.facebook_link }}"><i class="fa fa-facebook" aria-hidden="true"></i></a></span>
+							{% endif %}
+							{% if p_user.u.twitter_handle %}
+							<span><a class="btn-floating btn-small btn-tw" href="{{ p_user.u.twitter_handle }}"><i class="fa fa-twitter" aria-hidden="true"></i></a></span>
+                            {% endif %}
+                            {% if p_user.u.website_link %}
+							<span><a class="btn-floating btn-small btn-tw" href="{{ p_user.u.website_link }}"><i class="fa fa-external-link" aria-hidden="true"></i></a></span>
+							{% endif %}
+                        {% endif %}
+                        <br>
+                        <br>
+                        {% ifequal user.username p_user.username %}
+                        <div class="">
+                            <a class="btn btn-outline-default btn-round btn-sm" href="{% url "user:update" %}"><i class="fa fa-cog"></i> {% trans "Settings" %}</a>
+                        </div>
+                        {% endifequal %}
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-8">
+                        <h3>Bio</h3>
+                        <hr>
+                        {% if p_user.u.bio %}
+                            <p>{{ p_user.u.bio }}</p>
+                        {% else %}
+                            <p>Bio update pending</p>
+                        {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <ul class="tabs">
+            <li><a class="tab-link{% ifequal active_tab 0 %} is-selected{% endifequal %}" href="{% url "user:detail" pk=p_user.pk slug=p_user.u.slug %}" >{% trans "Comments" %}</a></li>
+            <li><a class="tab-link{% ifequal active_tab 1 %} is-selected{% endifequal %}" href="{% url "user:topics" pk=p_user.pk slug=p_user.u.slug %}" >{% trans "Topics" %}</a></li>
+            <li><a class="tab-link{% ifequal active_tab 2 %} is-selected{% endifequal %}" href="{% url "user:likes" pk=p_user.pk slug=p_user.u.slug %}" >{% trans "Likes" %}</a></li>
+        </ul>
+    </div>
+</div>
