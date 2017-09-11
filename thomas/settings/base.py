@@ -198,3 +198,15 @@ SOCIALACCOUNT_PROVIDERS = {
         'VERSION': 'v2.4',
     }
 }
+
+# SOCIALACCOUNT_PROVIDERS = {
+#     'google': {
+#         'SCOPE': [
+#             'profile',
+#             'email',
+#         ],
+#         'AUTH_PARAMS': {
+#             'access_type': 'online',
+#         }
+#     }
+# }
