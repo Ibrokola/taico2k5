@@ -29,24 +29,29 @@
                         <p class="hidden-lg-up">Instagram</p>
                     </a>
                 </li> -->
+                {% if not request.user.is_authenticated %}
                 <li class="nav-item">
-                    <a class="nav-link" rel="tooltip" title="Register" data-placement="bottom" href="">
+                    <a href="{% url 'account_signup' %}" class="nav-link" rel="tooltip" title="Register" data-placement="bottom" href="">
                         <i class="fa fa-user-plus fa-5x" aria-hidden="true"></i>
                         <p class="hidden-lg-up">Register</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" rel="tooltip" title="Login" data-placement="bottom" href="">
+                    <a href="{% url 'account_login' %}" class="nav-link" rel="tooltip" title="Login" data-placement="bottom" href="">
                         <i class="fa fa-users fa-5x" aria-hidden="true"></i>
                         <p class="hidden-lg-up">Login</p>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" rel="tooltip" title="Login" data-placement="bottom" href="">
-                        <i class="fa fa-users fa-5x" aria-hidden="true"></i>
-                        <p class="hidden-lg-up">My Account</p>
-                    </a>
-                </li>
+                {% else %}
+                    {% if request.user.is_authenticated %}
+                    <li class="nav-item">
+                        <a href="{% url 'account_logout' %}" class="nav-link" rel="tooltip" title="Logout" data-placement="bottom" href="">
+                            <i class="fa fa-user-times fa-5x" aria-hidden="true"></i>
+                            <p class="hidden-lg-up">Logout</p>
+                        </a>
+                    </li>
+                    {% endif %}
+                {% endif %}
             </ul>
         </div>
     </div>
