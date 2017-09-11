@@ -10,14 +10,18 @@
 
                 <div class="comment-media">
                     <div class="comment-img">
-                        <img class="comment-avatar" src="{# get_gravatar_url user=c.user size=50 #}" />
+                        {% if c.user.u.image %}
+                            <img class="comment-avatar img-fluid img-thumbnail" src="{{ c.user.u.image }}" width="50" height="50" />
+                            {% else %}
+                            <img class="comment-avatar img-fluid img-thumbnail" src="http://www.sbsc.in/images/dummy-profile-pic.png" width="50" height="50" />
+                        {% endif %}
                     </div>
 
                     <div class="comment-body">
                         <div class="comment-info">
 
                             <div class="comment-username">
-                                <a class="username{% if c.user.is_administrator %} is-admin{% elif c.user.is_moderator %} is-mod{% endif %}" href="{{ c.user.get_absolute_url }}">{{ c.user.username }}</a><span class="comment-realname">{{ c.user.get_full_name }}</span>
+                                <a class="username{% if c.user.is_administrator %} is-admin{% elif c.user.is_moderator %} is-mod{% endif %}" href="{{ c.user.u.get_absolute_url }}">{{ c.user.username }}</a><span class="comment-realname">{{ c.user.get_full_name }}</span>
                             </div>
 
                             <ul class="comment-date">

@@ -91,7 +91,7 @@ class YTPage(object):
 
     @property
     def page_range(self):
-        pages_range = settings.ST_YT_PAGINATOR_PAGE_RANGE
+        pages_range = settings.YT_PAGINATOR_PAGE_RANGE
 
         first_page = self.number - pages_range
         last_page = self.number + pages_range

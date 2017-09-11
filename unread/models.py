@@ -18,6 +18,9 @@ class TopicUnread(models.Model):
         verbose_name = _("topic unread")
         verbose_name_plural = _("topics unread")
 
+    def __str__(self):
+        return str(self.topic.title)
+
     def get_absolute_url(self):
         return self.topic.get_absolute_url()
 

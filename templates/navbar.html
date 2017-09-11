@@ -1,4 +1,5 @@
 {% load static %}
+{% load i18n %}
 <nav class="navbar navbar-toggleable-md fixed-top navbar-transparent" color-on-scroll="500">
     <div class="container">
         <div class="navbar-translate">
@@ -47,16 +48,35 @@
                 {% else %}
                     {% if request.user.is_authenticated %}
                     <li class="nav-item">
-                        <a href="{% url "user:detail" pk=user.pk slug=user.u.slug %}" class="nav-link" rel="tooltip" title="My Account" data-placement="bottom">
-                            <i class="fa fa-user-circle-o fa-5x" aria-hidden="true"></i>
-                            <p class="hidden-lg-up">My Account</p>
+                        <a href="{# url '' #}" class="nav-link" rel="tooltip" title="Notifications" data-placement="bottom">
+                            <i class="fa fa-bell fa-5x" aria-hidden="true"></i>
+                            <p class="hidden-lg-up">Notifications</p>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a href="{% url 'account_logout' %}" class="nav-link" rel="tooltip" title="Logout" data-placement="bottom">
-                            <i class="fa fa-user-times fa-5x" aria-hidden="true"></i>
-                            <p class="hidden-lg-up">Logout</p>
-                        </a>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" rel="tooltip" title="Categories"><i class="fa fa-newspaper-o fa-5x" aria-hidden="true"></i>
+                            <p class="hidden-lg-up">Categories</p></a>
+                        <ul class="dropdown-menu dropdown-menu-right dropdown-danger">
+                            {% for c in categories %}
+                                <li class="dropdown-item"><a href="{{ c.get_absolute_url }}">{{ c.title }}</a></li>
+                            {% endfor %}
+                            {% if category.parent %}
+                                <li class="dropdown-item"><a href="{{ category.parent.get_absolute_url }}">{% trans "All Subcategories" %}</a></li>
+                            {% else %}
+                                <li class="dropdown-item"><a href="{% url 'topic:index-active' %}">{% trans "All Categories" %}</a></li>
+                            {% endif %}
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" rel="tooltip" title="My Account"><i class="fa fa-user-circle-o fa-5x" aria-hidden="true"></i>
+                            <p class="hidden-lg-up">My Account</p></a>
+                        <ul class="dropdown-menu dropdown-menu-right dropdown-info">
+                            <li class="dropdown-item"><a href="{% url 'user:detail' pk=user.pk slug=user.u.slug %}">Profile</a></li>
+                            <li class="dropdown-item"><a href="#pk">Topics</a></li>
+                            <li class="dropdown-item"><a href="#pk">Unread Topics</a></li>
+                            <div class="dropdown-divider"></div>
+                            <li class="dropdown-item"><a href="{% url 'account_logout' %}">Logout</a></li>
+                        </ul>
                     </li>
                     {% endif %}
                 {% endif %}

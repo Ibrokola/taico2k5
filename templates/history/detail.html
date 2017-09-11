@@ -6,8 +6,14 @@
 
 {% block content %}
 
-    {# todo: add nav bar #}
+<div class="jumbotron jumbotron-fluid" style="padding-bottom: 60px; padding-top: -50px;">
+    <div class="container">
+        <!-- <h1 class="display-3">Fluid jumbotron</h1>
+        <p class="lead">This is a modified jumbotron that occupies the entire horizontal space of its parent.</p> -->
+    </div>
+</div>
 
+<div class="container">
     <h1 class="headline">{% trans "Comment history" %}</h1>
 
     <div class="comments">
@@ -45,7 +51,7 @@
     </div>
 
     {% render_paginator comments %}
-
+</div>
 
     <script>
 
