@@ -11,7 +11,7 @@
                 <div class="comment-media">
                     <div class="comment-img">
                         {% if c.user.u.image %}
-                            <img class="comment-avatar img-fluid img-thumbnail" src="{{ c.user.u.image }}" width="50" height="50" />
+                            <img class="comment-avatar img-fluid img-thumbnail" src="{{ c.user.u.image.url }}" width="50" height="50" />
                             {% else %}
                             <img class="comment-avatar img-fluid img-thumbnail" src="http://www.sbsc.in/images/dummy-profile-pic.png" width="50" height="50" />
                         {% endif %}

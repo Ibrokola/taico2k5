@@ -25,7 +25,7 @@
         <li><a href="{{ topic.category.get_absolute_url }}" >{{ topic.category.title }}</a></li>
     </ul>
     <!-- //Replace End -->
-    <h1 class="headline">
+    <h3 class="headline h3-responsive">
         {% if topic.is_pinned or topic.is_globally_pinned %}
             <i class="fa fa-thumb-tack"></i>
         {% endif %}
@@ -40,7 +40,7 @@
         {% elif user.pk == topic.user.pk and not topic.is_closed %}
             <a class="head-edit-link" href="{% url 'topic:update' topic.pk %}"><i class="fa fa-pencil"></i> {% trans "edit" %}</a>
         {% endif %}
-    </h1>
+    </h3>
     {% if user.u.is_administrator %}
     <div class="move-comments" style="display:none;">
         <div class="move-container">

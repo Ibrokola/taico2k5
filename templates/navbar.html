@@ -83,9 +83,9 @@
                         <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" rel="tooltip" title="My Account"><i class="fa fa-user-circle-o fa-5x" aria-hidden="true"></i>
                             <p class="hidden-lg-up">My Account</p></a>
                         <ul class="dropdown-menu dropdown-menu-right dropdown-info">
-                            {% if request.get_full_path == "/" %}                                
+                            {# if request.get_full_path == "/" #}                                
                             <li class="dropdown-item"><a href="{% url 'user:detail' pk=user.pk slug=user.u.slug %}">Profile</a></li>
-                            {% endif %}
+                            {# endif #}
                             <li class="dropdown-item"><a href="#pk">Topics</a></li>
                             <li class="dropdown-item"><a href="#pk">Unread Topics</a></li>
                             <div class="dropdown-divider"></div>

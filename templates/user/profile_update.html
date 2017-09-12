@@ -1,19 +1,29 @@
 {% extends "base.html" %}
+{% load crispy_forms_tags %}
 
 {% load i18n %}
 
 {% block title %}{% trans "Preferences" %}{% endblock %}
 
 {% block content %}
+<div class="jumbotron jumbotron-fluid" style="padding-bottom: 60px; padding-top: -50px;">
+    <div class="container">
+        <!-- <h1 class="display-3">Fluid jumbotron</h1>
+        <p class="lead">This is a modified jumbotron that occupies the entire horizontal space of its parent.</p> -->
+    </div>
+</div>
+<div class="container">
+    <div class="col-md-8 offset-md-2 col-sm-12">
+        <h1 class="headline">{% trans "Preferences" %}</h1>
 
-    <h1 class="headline">{% trans "Preferences" %}</h1>
+        <form method="post" action="." enctype="multipart/form-data">
+            {% csrf_token %}
+            {# include "snippet/form.html" with form=uform #}
+            {# include "snippet/form.html" #}
+            {{ form|crispy }}
 
-    <form action="." method="post">
-        {% csrf_token %}
-        {% include "snippet/form.html" with form=uform %}
-        {% include "snippet/form.html" %}
-
-        <input class="btn btn-info" type="submit" name="post" value="{% trans 'Save' %}" />
-    </form>
-
+            <input class="btn btn-info" type="submit" name="post" value="{% trans 'Save' %}" />
+        </form>
+    </div>
+</div>
 {% endblock %}

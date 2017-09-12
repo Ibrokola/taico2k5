@@ -20,6 +20,7 @@ User = get_user_model()
 @login_required
 def update(request):
     if request.method == 'POST':
+        p_user = request.user
         uform = UserForm(data=request.POST, instance=request.user)
         form = UserProfileForm(data=request.POST, instance=request.user.u)
 
@@ -27,7 +28,7 @@ def update(request):
             uform.save()
             form.save()
             messages.info(request, _("Your profile has been updated!"))
-            return redirect(reverse('user:update'))
+            return redirect(reverse('user:detail', kwargs={'pk': p_user.pk, 'slug': p_user.u.slug}))
     else:
         uform = UserForm(instance=request.user)
         form = UserProfileForm(instance=request.user.u)

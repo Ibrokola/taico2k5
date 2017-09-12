@@ -17,14 +17,14 @@
 </div>
 <div class="container">
     <div class="col-sm-8">
-            <h4 class="h4-responsive">Welcome <strong>{{ user.username }}</strong>, here are the latest posts 
-                <small><span class="float-right">{% include "topic/_top_bar.html" with category=None categories=categories %}</span></small>
-            </h4>
+        <h4 class="h4-responsive">Welcome <strong>{{ user.username }}</strong>, here are the latest posts 
+            <small><span class="float-right">{% include "topic/_top_bar.html" with category=None categories=categories %}</span></small>
+        </h4>
 
         {% include "topic/_render_list.html" %}
     </div>
     <div class="col-sm-4 hidden-md-down">
-
+        
     </div>
     {% render_paginator topics %}
 </div>
