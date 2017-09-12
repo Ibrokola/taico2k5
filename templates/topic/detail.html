@@ -79,7 +79,7 @@
                 <div class="comment-img">
                     <!-- <img class="comment-avatar" src="{# get_gravatar_url user=user size=50 #}" /> -->
                     {% if user.u.image %}
-                        <img class="comment-avatar img-fluid img-thumbnail" src="{{ user.u.image.url }}" width="50" height="50" />
+                        <img class="comment-avatar img-fluid" src="{{ user.u.image.url }}" width="50" height="50" />
                     {% else %}
                         <img class="comment-avatar img-fluid img-thumbnail" src="http://www.sbsc.in/images/dummy-profile-pic.png" width="50" height="50" />
                     {% endif %}
