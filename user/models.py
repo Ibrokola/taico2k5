@@ -13,6 +13,8 @@ from django.template.loader import render_to_string, get_template
 from django.shortcuts import render
 from django.core.mail import EmailMessage
 
+from django.core.validators import RegexValidator
+
 from django.contrib.auth import get_user_model
 
 from utils.models import AutoSlugField
@@ -62,9 +64,11 @@ class UserProfile(models.Model):
     image = models.ImageField(upload_to='images/', null=True, blank=True)
     slug = AutoSlugField(populate_from="user.username", db_index=False, blank=True)
     grad_year = models.PositiveIntegerField(default=0)
-    contact_no = models.PositiveIntegerField(default=0)
+    phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
+    # contact_no = models.PositiveIntegerField(default=0)
+    contact_no = models.CharField(validators=[phone_regex], max_length=20, blank=True, null=True)
     bio = models.TextField(null=True, blank=True)
-    location = models.CharField(_("location"), max_length=75, blank=True)
+    location = models.CharField(_("location"), max_length=90, blank=True)
     last_seen = models.DateTimeField(_("last seen"), auto_now=True)
     last_ip = models.GenericIPAddressField(_("last ip"), blank=True, null=True)
     timezone = models.CharField(_("time zone"), max_length=50, default='UTC')
