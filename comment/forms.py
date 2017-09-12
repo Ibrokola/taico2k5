@@ -127,3 +127,14 @@ class CommentImageForm(forms.Form):
             )
 
         return file
+    
+    def save(self):
+        file = self.cleaned_data['image']
+        file_hash = utils.get_file_hash(file)
+        file.name = ''.join((file_hash, '.', file.image.format.lower()))
+        name = os.path.join('spirit', 'images', str(self.user.pk), file.name)
+        name = default_storage.save(name, file)
+        file.url = default_storage.url(name)
+        return file
+    
+    

@@ -9,7 +9,7 @@ from django.db.models import Q
 from utils.model_fields import AutoSlugField
 # from utils.models import AutoSlugField
 
-class CategoryQuerySet(models.query.QuerySet):
+class CategoryQuerySet(models.QuerySet):
 
     def unremoved(self):
         return self.filter(Q(parent=None) | Q(parent__is_removed=False),

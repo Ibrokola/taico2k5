@@ -20,7 +20,7 @@ ACTION_CHOICES = (
 )
 
 
-class TopicNotificationQuerySet(models.query.QuerySet):
+class TopicNotificationQuerySet(models.QuerySet):
     def unremoved(self):
         return self.filter(Q(topic__category__parent=None) | Q(topic__category__parent__is_removed=False),
                             topic__category__is_removed=False,

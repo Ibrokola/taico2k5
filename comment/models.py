@@ -31,11 +31,10 @@ User = get_user_model()
 
 # User = settings.AUTH_USER_MODEL
 
-class CommentQuerySet(models.query.QuerySet):
+class CommentQuerySet(models.QuerySet):
     """custom query set for comment module"""
     def filter(self, *args, **kwargs):
-        return super(CommentQuerySet, self).filter(*args, **kwargs)\
-            .select_related('user__u')
+        return super(CommentQuerySet, self).filter(*args, **kwargs).select_related('user__u')
 
     def unremoved(self):
         return self.filter(
@@ -55,8 +54,8 @@ class CommentQuerySet(models.query.QuerySet):
     def visible(self):
         return self.unremoved().public()
 
-    # def _access(self, user):
-    #     return self.filter(Q(topic__category__is_private=False) | Q(topic__topics_private__user=user))
+    def _access(self, user):
+        return self.filter(Q(topic__category__is_private=False)) #| Q(topic__topics_private__user=user)
 
     def with_likes(self, user):
         if not user.is_authenticated():
@@ -85,7 +84,7 @@ class CommentQuerySet(models.query.QuerySet):
         return self.prefetch_related(prefetch_polls, prefetch_choices, prefetch_votes)
     
     def for_access(self, user):
-        return self.unremoved() #_access(user=user)
+        return self.unremoved()._access(user=user)
     
     def for_update_or_404(self, pk, user):
         if user.u.is_administrator:
@@ -116,8 +115,8 @@ class Comment(models.Model):
     objects = CommentQuerySet.as_manager()
 
     class Meta:
-        # ordering = ['-date', '-pk']
-        ordering = ['date', 'pk']
+        ordering = ['-date', '-pk']
+        # ordering = ['date', 'pk']
         verbose_name = _("comment")
         verbose_name_plural = _("comments")
 
@@ -156,4 +155,4 @@ class Comment(models.Model):
 
     @classmethod
     def get_last_for_topic(cls, topic_id):
-        return (cls.objects.filter(topic_id=topic_id).order_by('pk').last())
+        return (cls.objects.filter(topic_id=topic_id).order_by('pk').last())    
