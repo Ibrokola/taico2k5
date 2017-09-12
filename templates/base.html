@@ -420,31 +420,30 @@ input[type="search"]:focus{
     border: 1px solid #c65555; }
 </style> 
 
-    <script type="text/javascript">
-        !function(name,path,ctx){
-          var latest,prev=name!=='Keen'&&window.Keen?window.Keen:false;ctx[name]=ctx[name]||{ready:function(fn){var h=document.getElementsByTagName('head')[0],s=document.createElement('script'),w=window,loaded;s.onload=s.onerror=s.onreadystatechange=function(){if((s.readyState&&!(/^c|loade/.test(s.readyState)))||loaded){return}s.onload=s.onreadystatechange=null;loaded=1;latest=w.Keen;if(prev){w.Keen=prev}else{try{delete w.Keen}catch(e){w.Keen=void 0}}ctx[name]=latest;ctx[name].ready(fn)};s.async=1;s.src=path;h.parentNode.insertBefore(s,h)}}
-        }('KeenAsync','https://d26b395fwzu5fz.cloudfront.net/keen-tracking-1.1.3.min.js',this);
-      
-        KeenAsync.ready(function(){
-          // Configure a client instance
-          var client = new KeenAsync({
-            projectId: '59b06b2ec9e77c000149fd5a',
-            writeKey: '010E82CB41DED21E845F9C2A3FAE30EC4C0D10A7CB5D93B841F2A9A67F1183C173D4F2A3D23556157E075F2A52F24B355668505B5D89F24D691AAB6EFD509A7DFBF968CB401EEDB6C4AA5287CF7A812B341BF6EDA57BE140E5A775481A72BB5C'
-          });
-      
-          // Record an event
-          client.recordEvent('pageviews', {
-            title: document.title
-          });
-        });
-    </script>
+<script type="text/javascript">
+    !function(name,path,ctx){
+      var latest,prev=name!=='Keen'&&window.Keen?window.Keen:false;ctx[name]=ctx[name]||{ready:function(fn){var h=document.getElementsByTagName('head')[0],s=document.createElement('script'),w=window,loaded;s.onload=s.onerror=s.onreadystatechange=function(){if((s.readyState&&!(/^c|loade/.test(s.readyState)))||loaded){return}s.onload=s.onreadystatechange=null;loaded=1;latest=w.Keen;if(prev){w.Keen=prev}else{try{delete w.Keen}catch(e){w.Keen=void 0}}ctx[name]=latest;ctx[name].ready(fn)};s.async=1;s.src=path;h.parentNode.insertBefore(s,h)}}
+    }('KeenAsync','https://d26b395fwzu5fz.cloudfront.net/keen-tracking-1.1.3.min.js',this);
+  
+    KeenAsync.ready(function(){
+      // Configure a client instance
+      var client = new KeenAsync({
+        projectId: '59b7978cc9e77c0001f1a1fc',
+        writeKey: 'E0DCF4304895703C6A7C50BFF9090A58AAB5048BF9FFA63B3CCDE1065F5508BAE425E115D3730A31A2F87C051BB4BAD141DEE44CBE430FE80A9C8C41EC484332ECDA9F473AB6824F40D9D011C72FA4E739EA12D3B2D32E5E61B43C07E8AD9CBD'
+      });
+  
+      // Record an event
+      client.recordEvent('pageviews', {
+        title: document.title
+      });
+    });
+  </script>
 
-    <script type="text/javascript">
-        function createKeenWebAutoCollector(){window.keenWebAutoCollector=window.KeenWebAutoCollector.create({projectId:'59b06b2ec9e77c000149fd5a',writeKey:'010E82CB41DED21E845F9C2A3FAE30EC4C0D10A7CB5D93B841F2A9A67F1183C173D4F2A3D23556157E075F2A52F24B355668505B5D89F24D691AAB6EFD509A7DFBF968CB401EEDB6C4AA5287CF7A812B341BF6EDA57BE140E5A775481A72BB5C',onloadCallbacks:window.keenWebAutoCollector.onloadCallbacks}),window.keenWebAutoCollector.loaded()}function initKeenWebAutoCollector(){window.keenWebAutoCollector.domReady()?window.createKeenWebAutoCollector():document.addEventListener("readystatechange",function(){window.keenWebAutoCollector.domReady()&&window.createKeenWebAutoCollector()})}window.keenWebAutoCollector={onloadCallbacks:[],onload:function(a){this.onloadCallbacks.push(a)},domReady:function(){return["ready","complete"].indexOf(document.readyState)>-1}};
-      </script>
-      <script async type="text/javascript" src="https://d26b395fwzu5fz.cloudfront.net/keen-web-autocollector-1.0.8.min.js" onload="initKeenWebAutoCollector()"></script>
-      {% block head-extra %}{% endblock %}
-</head>
+  <script type="text/javascript">
+    function createKeenWebAutoCollector(){window.keenWebAutoCollector=window.KeenWebAutoCollector.create({projectId:'59b7978cc9e77c0001f1a1fc',writeKey:'E0DCF4304895703C6A7C50BFF9090A58AAB5048BF9FFA63B3CCDE1065F5508BAE425E115D3730A31A2F87C051BB4BAD141DEE44CBE430FE80A9C8C41EC484332ECDA9F473AB6824F40D9D011C72FA4E739EA12D3B2D32E5E61B43C07E8AD9CBD',onloadCallbacks:window.keenWebAutoCollector.onloadCallbacks}),window.keenWebAutoCollector.loaded()}function initKeenWebAutoCollector(){window.keenWebAutoCollector.domReady()?window.createKeenWebAutoCollector():document.addEventListener("readystatechange",function(){window.keenWebAutoCollector.domReady()&&window.createKeenWebAutoCollector()})}window.keenWebAutoCollector={onloadCallbacks:[],onload:function(a){this.onloadCallbacks.push(a)},domReady:function(){return["ready","complete"].indexOf(document.readyState)>-1}};
+  </script>
+  <script async type="text/javascript" src="https://d26b395fwzu5fz.cloudfront.net/keen-web-autocollector-1.0.8.min.js" onload="initKeenWebAutoCollector()"></script>
+
 
 <body>
     {% include "navbar.html" %}
