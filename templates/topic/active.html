@@ -1,9 +1,11 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% load thomas_tags i18n %}
 
 {% block title %}{% trans "Active topics" %}{% endblock %}
 {% block head-extra %}
+<link href="{% static 'css/style.css' %}" rel="stylesheet" />
 {% endblock %}
 
 {% block content %}

@@ -53,9 +53,9 @@ def index_ajax(request):
     if not request.is_ajax():
         return Http404()
 
-    notifications = TopicNotification.objects.for_access(request.user).order_by("is_read", "-date").select_related('comment__user__st', 'comment__topic')
+    notifications = TopicNotification.objects.for_access(request.user).order_by("is_read", "-date").select_related('comment__user__u', 'comment__topic')
 
-    notifications = notifications[:settings.ST_NOTIFICATIONS_PER_PAGE]
+    notifications = notifications[:5]
 
     notifications = [
         {
@@ -79,7 +79,7 @@ def index_unread(request):
         query_set=notifications,
         lookup_field='date',
         page_var='notif',
-        per_page=settings.ST_NOTIFICATIONS_PER_PAGE
+        per_page=settings.NOTIFICATIONS_PER_PAGE
     )
     next_page_pk = None
 
@@ -96,9 +96,10 @@ def index_unread(request):
 
 @login_required
 def index(request):
+    topics_per_page = 15
     notifications = yt_paginate(
         TopicNotification.objects.for_access(request.user),
-        per_page=config.topics_per_page,
+        per_page=topics_per_page,
         page_number=request.GET.get('page', 1)
     )
 

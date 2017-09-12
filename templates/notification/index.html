@@ -5,13 +5,20 @@
 {% block title %}{% trans "Notifications" %}{% endblock %}
 
 {% block content %}
+<div class="jumbotron jumbotron-fluid" style="padding-bottom: 60px; padding-top: -50px;">
+    <div class="container">
+        <!-- <h1 class="display-3">Fluid jumbotron</h1>
+        <p class="lead">This is a modified jumbotron that occupies the entire horizontal space of its parent.</p> -->
+    </div>
+</div>
 
-    <h1 class="headline">{% trans "Notifications" %}</h1>
+<div class="container">
+    <h3 class="h3-responsive">{% trans "Notifications" %}</h3>
 
     <div class="rows">
         {% include "notification/_render_list.html" %}
     </div>
 
     {% render_paginator notifications %}
-
+</div>
 {% endblock %}

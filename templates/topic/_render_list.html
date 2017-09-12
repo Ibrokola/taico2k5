@@ -1,5 +1,7 @@
 {% load thomas_tags i18n %}
-
+    {% if category %}
+        <h4 class="h4-responsive">{{ category.title }}</h4>
+    {% endif %}
         <br>
         <br>
     <div class="rows">

@@ -2,12 +2,12 @@
     {% for n in notifications %}
         <div class="row">
             {% url "user:detail" pk=n.comment.user.pk slug=n.comment.user.u.slug as url_profile %}
-            {% url "comment:find" pk=n.comment.pk as url_topic %}
+            {% url "comment:detail" pk=n.comment.pk as url_topic %}
 
             {% if n.is_comment %}
-                {% blocktrans trimmed with username=n.comment.user.username topic_title=n.topic.title %}<a href="{{ url_profile }}">{{ username }}</a> has commented on <a href="{{ url_topic }}">{{ topic_title }}</a>{% endblocktrans %}
+                {% blocktrans trimmed with username=n.comment.user.username topic_title=n.topic.title %}<a href="{{ url_profile }}">{{ username }}</a> <span style="margin-left: 5px; margin-right: 5px;"> has commented on </span> <a href="{{ url_topic }}">{{ topic_title }}</a>{% endblocktrans %}
             {% elif n.is_mention %}
-                {% blocktrans trimmed with username=n.comment.user.username topic_title=n.topic.title %}<a href="{{ url_profile }}">{{ username }}</a> has mentioned you on <a href="{{ url_topic }}">{{ topic_title }}</a>{% endblocktrans %}
+                {% blocktrans trimmed with username=n.comment.user.username topic_title=n.topic.title %}<a href="{{ url_profile }}">{{ username }}</a> <span style="margin-left: 5px; margin-right: 5px;"> has mentioned you on </span> <a href="{{ url_topic }}">{{ topic_title }}</a>{% endblocktrans %}
             {% else %}
                 Unknown action
             {% endif %}

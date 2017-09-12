@@ -1,30 +1,39 @@
 {% extends 'base.html' %}
+{% load crispy_forms_tags %}
 
-{% load spirit_tags i18n %}
+{% load thomas_tags i18n %}
 
 {% block title %}{% trans "Search" %}{% endblock %}
 
 {% block content %}
+<div class="jumbotron jumbotron-fluid" style="padding-bottom: 60px; padding-top: -50px;">
+    <div class="container">
+        <!-- <h1 class="display-3">Fluid jumbotron</h1>
+        <p class="lead">This is a modified jumbotron that occupies the entire horizontal space of its parent.</p> -->
+    </div>
+</div>
 <div class="container">
-    {% if not query %}
-        <h1 class="headline">{% trans "Search" %}</h1>
+    <div class="col-sm-12">
+        {% if not query %}
+            <!-- <h4 class="h4-responsive">{# trans "Search" #}</h4> -->
 
-        <form method="get" action="{% url 'search:search' %}">
-            {% include "snippet/form.html" %}
+            <form method="get" action="{% url 'search:search' %}">
+                {% include "snippet/form.html" %}
+                <!-- {{ form|crispy }} -->
+                <input class="btn btn-info btn-round" type="submit" value="{% trans "Search" %}" />
+            </form>
 
-            <input class="button" type="submit" value="{% trans "Search" %}" />
-        </form>
-
-    {% else %}
-        <h1 class="headline">{% trans "Results" %}</h1>
-
-        {% if page %}
-            {% include "search/_render_list.html" with topics=page %}
-            {% render_paginator page %}
         {% else %}
-            <p>{% trans "Sorry no search results found." %}</p>
-        {% endif %}
+            <h1 class="headline">{% trans "Results" %}</h1>
 
-    {% endif %}
+            {% if page %}
+                {% include "search/_render_list.html" with topics=page %}
+                {% render_paginator page %}
+            {% else %}
+                <p>{% trans "Sorry no results found." %}</p>
+            {% endif %}
+
+        {% endif %}
+    </div>
 </div>
 {% endblock %}

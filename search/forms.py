@@ -15,11 +15,11 @@ class BaseSearchForm(SearchForm):
     def clean_q(self):
         q = self.cleaned_data['q']
 
-        if len(q) < settings.ST_SEARCH_QUERY_MIN_LEN:
+        if len(q) < settings.SEARCH_QUERY_MIN_LEN:
             raise forms.ValidationError(
                 _("Your search must contain at "
                   "least %(length)s characters.") % {
-                    'length': settings.ST_SEARCH_QUERY_MIN_LEN})
+                    'length': settings.SEARCH_QUERY_MIN_LEN})
 
         return q
 

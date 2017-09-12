@@ -30,6 +30,10 @@ class TopicNotificationQuerySet(models.query.QuerySet):
         return self.filter(is_read=False)
 
     def _access(self, user):
+        return self.filter(Q(topic__category__is_private=False),
+                            user=user)  #| Q(topic__topics_private__user=user)
+
+    def for_access(self, user):
         return self.unremoved()._access(user=user).exclude(action=0)
 
     def read(self, user):
