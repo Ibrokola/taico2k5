@@ -28,6 +28,9 @@ def detail(request, pk, slug):
     subcategories = Category.objects.visible().children(parent=category)
 
     topics = Topic.objects.unremoved().with_bookmarks(user=request.user).for_category(category=category).order_by('-is_globally_pinned', '-is_pinned', '-last_active').select_related('category')
+    side1 = topics.filter(comment_count__gte=15)[:5]
+    side2 = topics.order_by('-date')[:5]
+
     topics_per_page = 15
     
     topics = yt_paginate(
@@ -39,6 +42,8 @@ def detail(request, pk, slug):
     context = {
         'category': category,
         'subcategories': subcategories,
-        'topics': topics
+        'topics': topics,
+        'side1': side1,
+        'side2': side2
     }
     return render(request, 'category/detail.html', context)

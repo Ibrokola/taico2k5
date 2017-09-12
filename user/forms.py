@@ -50,13 +50,15 @@ class UserProfileForm(forms.ModelForm):
             'time': defaultfilters.time(now)
         }
     
-    def clean(self, *args, **kwargs):
-        cleaned_data = super(UserProfileForm, self).clean(*args, **kwargs)
-        bio = cleaned_data.get("bio")
-        website_link = cleaned_data.get("website_link")
-        facebook_link = cleaned_data.get("facebook_link")
-        twitter_handle = cleaned_data.get("twitter_handle")
-        return cleaned_data 
+    # def clean(self, *args, **kwargs):
+    #     cleaned_data = super(UserProfileForm, self).clean(*args, **kwargs)
+    #     bio = cleaned_data.get("bio")
+    #     grad_year = cleaned_data("grad_year")
+    #     contact_no = cleaned_data("contact_no")
+    #     website_link = cleaned_data.get("website_link")
+    #     facebook_link = cleaned_data.get("facebook_link")
+    #     twitter_handle = cleaned_data.get("twitter_handle")
+    #     return cleaned_data 
 
 
 # class BasicConfigForm(ConfigForm):

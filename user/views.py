@@ -21,21 +21,21 @@ User = get_user_model()
 def update(request):
     if request.method == 'POST':
         p_user = request.user
-        uform = UserForm(data=request.POST, instance=request.user)
-        form = UserProfileForm(data=request.POST, instance=request.user.u)
+        # uform = UserForm(data=request.POST, instance=request.user)
+        form = UserProfileForm(request.POST, request.FILES or None, instance=request.user.u)
 
-        if all([uform.is_valid(), form.is_valid()]): #uform.is_valid(),   
-            uform.save()
+        if  form.is_valid(): #uform.is_valid(),all([uform.is_valid(),])   
+            # uform.save()
             form.save()
             messages.info(request, _("Your profile has been updated!"))
             return redirect(reverse('user:detail', kwargs={'pk': p_user.pk, 'slug': p_user.u.slug}))
     else:
-        uform = UserForm(instance=request.user)
+        # uform = UserForm(instance=request.user)
         form = UserProfileForm(instance=request.user.u)
 
     context = {
         'form': form,
-        'uform': uform
+        # 'uform': uform
     }
     template = 'user/profile_update.html'
     return render(request, template, context)
