@@ -9,8 +9,8 @@ from django.core.exceptions import PermissionDenied
 
 from djconfig import config
 
-# from core import utils
-# from core.utils.paginator import yt_paginate
+import utils
+from utils.paginator import yt_paginate
 from .models import CommentPoll, CommentPollChoice, CommentPollVote
 from .forms import PollVoteManyForm
 
@@ -74,10 +74,10 @@ def voters(request, pk):
         raise PermissionDenied
 
     choice_votes = CommentPollVote.objects.unremoved().for_choice(choice=choice).select_related('voter__st')
-
+    topics_per_page = 15
     choice_votes = yt_paginate(
         choice_votes,
-        per_page=config.topics_per_page,
+        per_page=topics_per_page,
         page_number=request.GET.get('page', 1)
     )
 
