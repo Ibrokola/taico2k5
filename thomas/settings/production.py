@@ -14,7 +14,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__fil
 SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['taicoalum.herokuapp.com']
 
@@ -29,15 +29,15 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
+
     #third party apps
     'allauth',
-    # 'allauth.account',
-    # 'allauth.socialaccount',
+    'allauth.account',
+    'allauth.socialaccount',
     'crispy_forms',
     'storages',
     'djconfig',
     'haystack',
-
 
     #relattive apps
     'home',
@@ -89,7 +89,7 @@ NOTIFICATIONS_PER_PAGE = 20
 MENTIONS_PER_COMMENT = 30
 DOUBLE_POST_THRESHOLD_MINUTES = 30
 
-YT_PAGINATOR_PAGE_RANGE = 3
+PAGINATOR_PAGE_RANGE = 3
 
 SEARCH_QUERY_MIN_LEN = 3
 
@@ -97,7 +97,7 @@ USER_LAST_SEEN_THRESHOLD_MINUTES = 1
 
 # PRIVATE_FORUM = False
 
-ALLOWED_UPLOAD_IMAGE_FORMAT = ('jpeg', 'png', 'gif')
+ALLOWED_UPLOAD_IMAGE_FORMAT = ('jpeg', 'png', 'gif', 'jpg')
 ALLOWED_URL_PROTOCOLS = {
     'http', 'https', 'mailto', 'ftp', 'ftps',
     'git', 'svn', 'magnet', 'irc', 'ircs'}
@@ -119,10 +119,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # 'user.middleware.TimezoneMiddleware',
-    # 'user.middleware.LastIPMiddleware',
-    # 'user.middleware.LastSeenMiddleware',
-    # 'user.middleware.ActiveUserMiddleware',
+    'user.middleware.TimezoneMiddleware',
+    'user.middleware.LastIPMiddleware',
+    'user.middleware.LastSeenMiddleware',
+    'user.middleware.ActiveUserMiddleware',
 ]
 
 ROOT_URLCONF = 'thomas.urls'

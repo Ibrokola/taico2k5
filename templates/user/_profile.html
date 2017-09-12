@@ -53,7 +53,7 @@
                     </div>
                 </div>
                 <div class="col-sm-6 col-md-8">
-                        <h3>Bio</h3>
+                        <h3>Bio</h3>   <span style="padding-left:30px;" class="float-right">Get back <a href="{% url 'home' %}" class="btn btn-info btn-sm">Home</a></span>
                         <hr>
                         {% if p_user.u.bio %}
                             <p>{{ p_user.u.bio }}</p>

@@ -27,8 +27,8 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     #third party apps
     'allauth',
-    # 'allauth.account',
-    # 'allauth.socialaccount',
+    'allauth.account',
+    'allauth.socialaccount',
     'crispy_forms',
     'storages',
     'djconfig',
