@@ -47,9 +47,11 @@
                 {% if not c.action %}
                     <ul class="comment-actions">
                         {% if user.is_authenticated %}
-                            {% if user.is_moderator %}
+                            {# if user.is_moderator #}
+                            {% if c.user.pk == user.pk %}
                                 <li><a href="{% url 'comment:delete' c.pk %}"><i class="fa fa-times"></i> {% trans "delete" %}</a></li>
                             {% endif %}
+                            {# endif #}
 
                             <!-- <li><a href="{# url "flag:create" c.pk #}"><i class="fa fa-flag"></i> {# trans "report" #}</a></li> -->
                         {% endif %}
