@@ -14,11 +14,12 @@
         <input class="btn btn-primary btn-sm" type="submit" value="{% trans 'Notify Me' %}" />
     {% endif %}
     
+    
+    <!-- {# if notification.is_active #}
     <div class="togglebutton">
-    {% if notification.is_active %}
-        <input class="is-undo" type="submit" data-toggle="switch" checked="" value="{% trans 'Unnotify Me' %}"><span class="toggle"></span>
-    {% else %}
-        <input type="submit" data-toggle="switch" checked="" value="{% trans 'Notify Me' %}"><span class="toggle"></span>
-    {% endif %}
-    </div> 
+    <span class="toggle"><input class="is-undo" type="submit" data-toggle="switch" checked="" value="{# trans 'Unnotify Me' #}"></span>
+    {# else #}
+        <input type="submit" data-toggle="switch" checked="" value="{# trans 'Notify Me' #}"><span class="toggle"></span>
+    {# endif #}
+    </div> -->
 </form>
