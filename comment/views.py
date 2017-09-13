@@ -23,7 +23,8 @@ def publish(request, topic_id, pk=None):
     user = request.user
     topic = get_object_or_404(
         Topic.objects.opened().for_access(user),
-        pk=topic_id)
+        pk=topic_id
+        )
 
     if request.method == 'POST':
         form = CommentForm(user=user, topic=topic, data=request.POST)

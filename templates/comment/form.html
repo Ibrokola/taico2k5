@@ -2,7 +2,7 @@
 {% load static %}
 {% load crispy_forms_tags %}
 
-<form action="{% url "comment:publish" topic_id %}" method="post" class="js-reply">
+<form action="{% url 'comment:publish' topic_id %}" method="post" class="js-reply">
     {% csrf_token %}
     {% if next %}<input type="hidden" name="next" value="{{ next }}" />{% endif %}
 

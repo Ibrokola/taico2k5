@@ -85,7 +85,7 @@ def detail(request, pk, slug):
 
     topic_utils.topic_viewed(request=request, topic=topic)
 
-    comments = Comment.objects.for_topic(topic=topic).with_likes(user=request.user).with_polls(user=request.user).order_by('-date')
+    comments = Comment.objects.for_topic(topic=topic).with_likes(user=request.user).with_polls(user=request.user).order_by('date')
 
     comments = paginate(
         comments,
