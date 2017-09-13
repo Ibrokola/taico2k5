@@ -13,7 +13,7 @@ def render_form_errors(form):
 
 
 def json_response(data=None, status=200):
-    # TODO: Use JsonResponse on Django 1.7
+    # todo: Use JsonResponse on Django 1.7
     data = data or {}
     return HttpResponse(json.dumps(data), content_type='application/json', status=status)
 
