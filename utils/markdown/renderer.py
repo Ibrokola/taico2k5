@@ -13,7 +13,7 @@ def sanitize_url(url):
     if len(parts) == 1 and url.startswith('/'):
         return url
 
-    if parts[0] in settings.ST_ALLOWED_URL_PROTOCOLS:
+    if parts[0] in settings.ALLOWED_URL_PROTOCOLS:
         return url
 
     return ''

@@ -34,7 +34,7 @@
 
                         </div>
 
-                        <div class="comment-text">
+                        <div class="comment-text img-fluid img-responsive">
                             {% if not c.action %}
                                 {% post_render_comment comment=c %}
                             {% else %}
@@ -132,22 +132,19 @@
 	{% endfor %}
 
 </div>
-
-
 <script>
     $( document ).ready(function() {
-
-        {% if user.is_authenticated %}
+    /*    {# if user.is_authenticated #}
             $('.js-like').like( {
                 csrfToken: "{{ csrf_token }}",
-                likeText: "{% trans "like" %} ({count})",
+                likeText: '{% trans "like" %} ({count})',
                 removeLikeText: '{% trans "unlike" %} ({count})',
             } );
-        {% endif %}
+        {# endif #}
 
         $('.js-share').social_share();
 
-        hljs.initHighlightingOnLoad();
+        hljs.initHighlightingOnLoad(); */
 
     });
 </script>

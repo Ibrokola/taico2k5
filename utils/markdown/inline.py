@@ -65,7 +65,7 @@ class InlineLexer(mistune.InlineLexer):
         # Already mentioned?
         if username in self.mentions:
             user = self.mentions[username]
-            return self.renderer.mention(username, user.st.get_absolute_url())
+            return self.renderer.mention(username, user.u.get_absolute_url())
 
         # Mentions limiter
         if self._mention_count >= settings.MENTIONS_PER_COMMENT:
@@ -76,9 +76,9 @@ class InlineLexer(mistune.InlineLexer):
 
         # New mention
         try:
-            user = User.objects.select_related('st').get(username=username)
+            user = User.objects.select_related('u').get(username=username)
         except User.DoesNotExist:
             return m.group(0)
 
         self.mentions[username] = user
-        return self.renderer.mention(username, user.st.get_absolute_url())
+        return self.renderer.mention(username, user.u.get_absolute_url())

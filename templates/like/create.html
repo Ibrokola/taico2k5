@@ -13,7 +13,7 @@
         {% csrf_token %}
         {# include "snippet/form.html" #}
         {{ form|crispy }}
-        <input class="button" type="submit" name="post" value="{% trans "Like" %}" />
+        <input class="btn btn-info btn-sm" type="submit" name="post" value="{% trans "Like" %}" />
     </form>
 
 {% endblock %}

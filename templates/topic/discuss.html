@@ -49,12 +49,14 @@
                 {{ com_form|crispy }}
             </div>
 
-            <div class="" style="margin-left: -50px;">
-                {# include "comment/editor.html" #}
+            <div class="" style="margin-left: -40px;">
+                {% include "comment/editor.html" %}
                 
             </div>
-            <input type="submit" class="btn btn-info btn-sm" value="{% trans "Post" %}">
+            <input type="submit" class="btn btn-info btn-sm float-right" value="{% trans "Post" %}">
         </form>
     </div>
 </div>
 {% endblock %}
+
+{% block extra-js %}{% endblock %}

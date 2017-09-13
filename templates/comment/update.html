@@ -14,18 +14,19 @@
     </div>
 </div>
 <div class="container">
-    <h1 class="headline">{% trans "Edit comment" %}</h1>
+    <h3 class="headline h3-responsive">{% trans "Edit comment" %}</h3>
     
     <form action="." method="post" class="js-reply">
         {% csrf_token %}
-        {# include "spirit/_form.html" #}
+        {# include "snippet/_form.html" #}
         {{ form|crispy }}
 
-        <div class="container">
-            {# include "comment/editor.html" #}
-
-            <input class="btn btn-default btn-sm" type="submit" value="{% trans 'Post' %}" />
+        <div class="" style="margin-left: -40px;">
+            {% include "comment/editor.html" %}
         </div>
+            <input class="btn btn-info btn-sm float-right" type="submit" value="{% trans 'Post' %}" />
+        
     </form>
 </div>
 {% endblock %}
+{% block extra-js %}{% endblock %}

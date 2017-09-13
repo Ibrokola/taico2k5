@@ -40,7 +40,7 @@
     <link href='https://fonts.googleapis.com/css?family=Montserrat:400,300,700' rel='stylesheet' type='text/css'>
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
     <link href="{% static 'css/nucleo-icons.css' %}" rel="stylesheet" />
-
+    {% block extra-header %}{% endblock %}
     <style>
         .row-title {
             float: left;
@@ -418,6 +418,57 @@ input[type="search"]{
     border: 1px solid #cecece; }
 input[type="search"]:focus{
     border: 1px solid #c65555; }
+
+
+.share {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9100;
+    display: table;
+    width: 100%;
+    height: 100%;
+    background: #fefefe;
+    background: rgba(254, 254, 254, 0.75); }
+@media screen and (min-width: 768px) {
+        .share {
+        width: 300px;
+        height: 150px;
+        top: 50%;
+        left: 50%;
+        margin-top: -75px;
+        margin-left: -150px;
+        padding: 24px;
+        border: #cecece 1px solid; } }
+    
+.share-close {
+    float: right;
+    margin-bottom: 24px; }
+
+.share-box {
+    display: table-cell;
+    vertical-align: middle; }
+      
+.share-url {
+    margin-bottom: 12px; }
+
+.share-actions {
+    text-align: right; }
+
+.share-actions li {
+    margin-left: 24px; }
+
+.share-actions li {
+    display: inline-block;
+    *display: inline;
+    zoom: 1; 
+    margin-left: 12px;
+}
+.share-actions li:first-child{
+    margin-left: 0; 
+}
+
+
 </style> 
 
 <script type="text/javascript">
@@ -474,21 +525,8 @@ input[type="search"]:focus{
 <!--  Paper Kit Initialization and functons -->
 <script src="{% static 'js/paper-kit.js' %}"></script>
 
-<script src="{% static 'js/thomas/htmldiff/htmldiff.no-min.js' %}"></script>
-<script src="{% static 'js/thomas/bookmark.no-min.js' %}"></script>
-<script src="{% static 'js/thomas/comments_diff.no-min.js' %}"></script>
-<script src="{% static 'js/thomas/editor_image_upload.no-min.js' %}"></script>
-<script src="{% static 'js/thomas/editor.no-min.js' %}"></script>
-<script src="{% static 'js/thomas/emoji_list.no-min.js' %}"></script>
-<script src="{% static 'js/thomas/like.no-min.js' %}"></script>
-<script src="{% static 'js/thomas/messages.no-min.js' %}"></script>
-<script src="{% static 'js/thomas/notification.no-min.js' %}"></script>
-<script src="{% static 'js/thomas/postify.no-min.js' %}"></script>
-<script src="{% static 'js/thomas/social_share.no-min.js' %}"></script>
-<script src="{% static 'js/thomas/store.no-min.js' %}"></script>
-<script src="{% static 'js/thomas/tab.no-min.js' %}"></script>
-<script src="{% static 'js/thomas/util.no-min.js' %}"></script>
-<script src="{% static 'js/all.js' %}"></script>
+<!-- <script src="{# static 'js/all.js' #}"></script> -->
+<script src="{% static 'js/all.min.js' %}"></script>
 
 <script>
     $( document ).ready(function() {
@@ -511,9 +549,72 @@ input[type="search"]:focus{
                 empty: "{% trans 'No new notifications, yet' %}",
                 unread: "{% trans 'unread' %}",
             } );
+            $('.js-like').like( {
+                csrfToken: "{{ csrf_token }}",
+                likeText: '{% trans "like" %} ({count})',
+                removeLikeText: '{% trans "unlike" %} ({count})',
+            });
         {% endif %}
+
+        marked.setOptions( {
+            renderer: new marked.Renderer(),
+            gfm: true,
+            tables: false,
+            breaks: true,
+            pedantic: false,
+            sanitize: true,
+            smartLists: false,
+            smartypants: false
+        } );
+
+        $('.js-reply' ).find( 'textarea' ).editor_image_upload( {
+            csrfToken: "{{ csrf_token }}",
+            target: '{% url "comment:image-upload-ajax" %}',
+            placeholderText: '{% trans "uploading {image_name}" %}'
+        } )
+        .editor( {
+            boldedText: '{% trans "bolded text" %}',
+            italicisedText: '{% trans "italicised text" %}',
+            listItemText: '{% trans "list item" %}',
+            linkText: '{% trans "link text" %}',
+            linkUrlText: '{% trans "link url" %}',
+            imageText: '{% trans "image text" %}',
+            imageUrlText: '{% trans "image url" %}',
+            pollTitleText: '{% trans "Title" %}',
+            pollChoiceText: '{% trans "Description" %}'
+        } )
+        .atwho({
+            at: ':',
+            tpl: "<li data-value=':${name}:'><i class=\"tw tw-${class_name}\"></i> ${name} </li>",
+            data: $.emoji_list(),
+            callbacks: {
+                before_save: function(data) {return data},  // Avoid extra work
+                tpl_eval: function(tpl, map) {
+                    map.class_name = map.name
+                            .split('_').join('-')
+                            .split('+').join('plus');
+
+                    try {
+                        return tpl.replace(/\$\{([^\}]*)\}/g, function(tag, key, pos) {
+                            return map[key]
+                        });
+                    } catch (error) {
+                        return "";
+                    }
+                }
+
+            }
+        });
+
+        $('.js-share').social_share();
+
+        hljs.initHighlightingOnLoad();
+
+
 
     });
 </script>
+{% block extra-js %}{% endblock %}
+{# block extra-js #}{# endblock #}
 </body>
 </html>
