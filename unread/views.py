@@ -2,7 +2,7 @@ from django.shortcuts import render
 
 from django.contrib.auth.decorators import login_required
 
-# from core.utils.paginator.infinite_paginator import paginate
+from utils.paginator.infinite_paginator import paginate
 from .models import Topic
 
 

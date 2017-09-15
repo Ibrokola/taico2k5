@@ -5,6 +5,8 @@ from django.conf import settings
 from django.conf.urls.static import static
 from home.views import homepage
 
+from notifications import views
+
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', homepage, name='home'),
@@ -17,7 +19,10 @@ urlpatterns = [
     url(r'^poll/', include('poll.urls', namespace='poll')),
     url(r'^favorite/', include('favorite.urls', namespace='favorite')),
     url(r'^like/', include('like.urls', namespace='like')),
-    url(r'^notification/', include('notification.urls', namespace='notification')),
+    # url(r'^notification/', include('notifications.urls', namespace='notification')),
+    url(r'^notifications/$', views.all, name='notifications_all'),
+    url(r'^notifications/ajax/$', views.get_notifications_ajax, name='get_notifications_ajax'),
+    url(r'^notifications/read/(?P<id>\d+)/$', views.read, name='notifications_read'),
     url(r'^unread/', include('unread.urls', namespace='unread')),
     url(r'^u/', include('user.urls', namespace='user')),
 ]

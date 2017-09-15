@@ -1,5 +1,5 @@
 from bookmark.models import CommentBookmark
-from notification.models import TopicNotification
+from notifications.models import Notification
 from unread.models import TopicUnread
 
 
@@ -16,6 +16,6 @@ def topic_viewed(request, topic):
         topic=topic,
         comment_number=comment_number
     )
-    TopicNotification.mark_as_read(user=user, topic=topic)
+    # Notification.read(user=user, topic=topic)
     TopicUnread.create_or_mark_as_read(user=user, topic=topic)
     topic.increase_view_count()

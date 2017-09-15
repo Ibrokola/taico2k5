@@ -14,6 +14,7 @@ from comment.models import Comment
 from .models import Topic 
 from .forms import TopicForm
 from . import topic_utils
+from notifications.signals import notify
 
 @login_required
 @ratelimit(rate='1/10s')

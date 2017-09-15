@@ -1,10 +1,14 @@
 {% load i18n %}
 {% load crispy_forms_tags %}
 
-<form method="get" action="{% url 'search:search' %}">
+<form class="searchbox" method="GET" action="{% url 'search:search' %}">
     {# include "snippet/form.html" #}
-
-    {{ form|crispy }}
-
-    <input class="button" type="submit" value="{% trans "Search" %}" />
+    <div class="form-group">
+        {{ form|crispy }}
+        <input type="submit" class='searchbox-submit'/>
+        <span class="searchbox-icon"><i class="fa fa-search fa-5x" aria-hidden="true"></i></span> 
+    </div>
 </form>
+<!-- <a href="{% url 'search:search' %}" class="nav-link searchbox-icon" rel="tooltip" title="Search">
+        <i class="fa fa-search fa-5x" aria-hidden="true"></i>        
+</a> -->

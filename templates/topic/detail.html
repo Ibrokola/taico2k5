@@ -65,7 +65,7 @@
 
         <div class="notify float-right">
             {% if user.is_authenticated %}
-                {% render_notification_form user=user topic=topic %}
+                {# render_notification_form user=user topic=topic #}
             {% elif not topic.is_closed %}
                 <a class="btn btn-default btn-sm" href="{% url 'comment:publish' topic_id=topic.pk %}">{% trans "Post" %}</a>
             {% endif %}

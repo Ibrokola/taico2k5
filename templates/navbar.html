@@ -49,18 +49,23 @@
                 {% else %}
                     {% if request.user.is_authenticated %}
                     <li class="nav-item">
-                        <a href="{% url 'search:search' %}" class="nav-link" rel="tooltip" title="Search" data-related=".js-search-content">
-                                {# render_search_form #} <i class="fa fa-search fa-5x" aria-hidden="true"></i>
-                            <!-- <p class="hidden-lg-up">Notifications</p> -->
+                        <a href="{% url 'search:search' %}" class="nav-link searchbox-icon" rel="tooltip" title="Search">
+                            {# render_search_form #}
+                            <i class="fa fa-search fa-5x" aria-hidden="true"></i>
                         </a>
                     </li>
-                    {% has_topic_notifications user as has_notifications %}
-                    <li class="nav-item">
-                        <a class="nav-link js-tab-notification{% if has_notifications %} is-highlighted {% endif %}" href="{% url 'notification:index' %}" data-related=".js-notifications-content" rel="tooltip" title="Notifications" >
+                    {# has_topic_notifications user as has_notifications #}
+                    <li class="nav-item dropdown">
+                        <a href="{# url 'notification:index' #}" class="nav-link notification-toggle{# if has_notifications #} is-highlighted{# endif #}" id="noti_button" rel="tooltip" title="Notifications" data-placement="bottom" data-toggle="dropdown" aria-haspopup="true" role="button" data-related=".js-notifications-content">
+                            <i class="fa fa-bell fa-5x" aria-hidden="true"></i><span id="note-count-badge" class="badge badge-danger"></span>
+                            <!-- <p class="hidden-lg-up">Notifications</p> -->
+                        </a>
+
+                        <!-- <a href="{# url 'notification:index' #}" class="nav-link js-tab-notification{# if has_notifications #} is-highlighted {# endif #}" data-related=".js-notifications-content" rel="tooltip" title="Notifications" >
                             <i class="fa fa-bell fa-5x" aria-hidden="true"></i>
-                            <p class="hidden-lg-up">Notifications</p></a>
-                        <ul class="dropdown-menu dropdown-menu-right dropdown-primary">
-                            <div class="header-tab-content js-tab-content js-notifications-content dropdown-item"></div>
+                            <p class="hidden-lg-up">Notifications</p></a> -->
+                        <ul class="dropdown-menu dropdown-menu-right dropdown-primary js-notifications-content notification_dropdown" id='notification_dropdown'>
+                            
                         </ul>
                     </li>
                     <li class="nav-item dropdown">

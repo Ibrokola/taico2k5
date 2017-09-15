@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% load thomas_tags i18n %}
+
+{% block title %}{% trans "Notifications" %}{% endblock %}
+
+{% block content %}
+<div class="jumbotron jumbotron-fluid" style="padding-bottom: 60px; padding-top: -50px;">
+    <div class="container">
+        <!-- <h1 class="display-3">Fluid jumbotron</h1>
+        <p class="lead"></p> -->
+    </div>
+</div>
+
+<div class="container">
+    <h3 class="h3-responsive text-center">{% trans "Notifications" %}</h3>
+
+    <div class="rows text-center">
+        {# include "notifications/_render_list.html" #}
+        {% for note in notifications %}
+        <div class="row">
+            <span style="margin-left: 5px; margin-right: 5px;"> {{ note|safe }} </span>
+            {% if note.unread %}
+                <span class="row-unread">{% trans "unread" %}</span>
+            {% endif %}
+            {% if note.read %}
+                <span class="row-unread">{% trans "read" %}</span>
+            {% endif %}
+        </div>
+    {% empty %}s
+        <p>{% trans "There are no notifications, yet" %}</p>
+    {% endfor %}
+    </div>
+
+    {% render_paginator notifications %}
+</div>
+{% endblock %}

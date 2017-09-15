@@ -1,0 +1,24 @@
+{% load i18n %}
+    {% for note in notifications %}
+        <div class="row">
+            {% url "user:detail" pk=comment.user.pk slug=comment.user.u.slug as url_profile %}
+            {% url "comment:detail" pk=comment.pk as url_topic %}
+
+            {% if note %}
+                <!-- {# blocktrans trimmed with username=comment.user.username topic_title=topic.title #}<a href="{{ url_profile }}">{{ comment.user.u }}</a> <span style="margin-left: 5px; margin-right: 5px;"> has commented on </span> <a href="{{ url_topic }}">{{ topic_title }}</a>{# endblocktrans #} -->
+                {% blocktrans trimmed with username=comment.user.username topic_title=topic.title %}<a href="{{ url_profile }}">{{ comment.user.u }}</a> <span style="margin-left: 5px; margin-right: 5px;"> {{ note|safe }} </span> <a href="{{ url_topic }}">{{ topic_title }}</a>{% endblocktrans %}
+            {% elif note.comment %}
+                {% blocktrans trimmed with username=comment.user.username topic_title=topic.title %}<a href="{{ url_profile }}">{{ user.username }}</a> <span style="margin-left: 5px; margin-right: 5px;"> has mentioned you on </span> <a href="{{ url_topic }}">{{ topic_title }}</a>{% endblocktrans %}
+            {% else %}
+                Unknown action
+            {% endif %}
+
+            {% if note.unread %}
+                <span class="row-unread">{% trans "unread" %}</span>
+                {% else %}
+                <span class="row-read">{% trans "read" %}</span>
+            {% endif %}
+        </div>
+    {% empty %}
+        <p>{% trans "There are no notifications, yet" %}</p>
+    {% endfor %}

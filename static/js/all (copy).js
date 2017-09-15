@@ -11391,6 +11391,7 @@ https://github.com/imakewebthings/jquery-waypoints/blob/master/licenses.txt
         }
     }), $.fn.move_comments.MoveComment = MoveComment
 }).call(this);
+
 (function() {
     var $, Notification, bind = function(fn, me) {
         return function() {
@@ -11428,27 +11429,27 @@ https://github.com/imakewebthings/jquery-waypoints/blob/master/licenses.txt
             }(this))
         }, Notification.prototype.addNotifications = function(data) {
             var showAllLink, unread;
-            return unread = '<span class="note">' + this.options.unread + "</span>", $.each(data.n, function(_this) {
+            return unread = '<span class="row-unread">' + this.options.unread + "</span>", $.each(data.n, function(_this) {
                 return function(i, obj) {
                     var link, txt;
                     return txt = 1 === obj.action ? _this.options.mentionTxt : _this.options.commentTxt, obj.is_read || (txt = txt + " " + unread), link = '<a href="' + obj.url + '">' + obj.title + "</a>", txt = $.format(txt, {
                         user: obj.user,
                         topic: link
-                    }), _this.tabNotificationContent.append("<li>" + txt + "</li>")
+                    }), _this.tabNotificationContent.append("<div>" + txt + "</div>")
                 }
-            }(this)), showAllLink = '<a href="' + this.options.notificationListUrl + '">' + this.options.showAll + "</a>", this.tabNotificationContent.append("<li class='seeAll'>" + showAllLink + "</li>")
+            }(this)), showAllLink = '<a href="' + this.options.notificationListUrl + '">' + this.options.showAll + "</a>", this.tabNotificationContent.append("<div>" + showAllLink + "</div>")
         }, Notification.prototype.addIsEmptyTxt = function() {
-            return this.tabNotificationContent.append("<li>" + this.options.empty + "</li>")
+            return this.tabNotificationContent.append("<div>" + this.options.empty + "</div>")
         }, Notification.prototype.addErrorTxt = function(textStatus, error) {
-            return this.tabNotificationContent.append("<li>Error: " + textStatus + ", " + error + "</li>")
+            return this.tabNotificationContent.append("<div>Error: " + textStatus + ", " + error + "</div>")
         }, Notification.prototype.ajaxDone = function() {
-            return this.el.addClass("notification_dropdown"), $.tab(), this.el.trigger("click")
+            return this.el.addClass("js-tab"), $.tab(), this.el.trigger("click")
         }, Notification.prototype.stopClick = function(e) {
             e.preventDefault(), e.stopPropagation()
         }, Notification
     }(), $.extend({
         notification: function(options) {
-            return $(".notification-toggle").each(function() {
+            return $(".js-tab-notification").each(function() {
                 return $(this).data("plugin_notification") ? void 0 : $(this).data("plugin_notification", new Notification(this, options))
             })
         }

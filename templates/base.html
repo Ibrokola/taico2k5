@@ -211,18 +211,6 @@
     *display: inline;
     zoom: 1; }
 
-.inline-list li,
-.tabs li,
-.admin-tabs li,
-.header-tabs li,
-.nav li,
-.comment-date li,
-.comment-actions li,
-.paginator li,
-.reply-markdown li,
-.share-actions li,
-.profile-track li {
-    margin-left: 12px; }
 
     .inline-list li:first-child,
 .tabs li:first-child,
@@ -320,20 +308,6 @@ ul.reply-markdown {
 list-style: none;
 margin-left: 0; }
 
-.inline-list li,
-.tabs li,
-.admin-tabs li,
-.header-tabs li,
-.nav li,
-.comment-date li,
-.comment-actions li,
-.paginator li,
-.reply-markdown li,
-.share-actions li,
-.profile-track li, .row-info div {
-  display: inline-block;
-  *display: inline;
-  zoom: 1; }
 
 .inline-list li,
 .tabs li,
@@ -347,6 +321,7 @@ margin-left: 0; }
 .share-actions li,
 .profile-track li {
 margin-left: 12px; }
+
 .inline-list li:first-child,
 .tabs li:first-child,
 .admin-tabs li:first-child,
@@ -392,10 +367,20 @@ border: #cecece 1px solid; }
 .tab-link {
     display: block;
     font-size: 18px;
-    padding: 0 12px 6px 12px; }
+    padding: 0 12px 6px 12px; 
+}
+
 .tab-link.is-selected {
     color: #1c1c1c;
     border-bottom: #cecece 4px solid; }
+
+.header-tab-link.is-selected {
+    color: #1c1c1c; 
+}
+
+.header-tab-link.is-highlighted {
+    color: #c65555; 
+}
 
 .profile-preferences {
     margin-bottom: 48px;
@@ -468,6 +453,71 @@ input[type="search"]:focus{
     margin-left: 0; 
 }
 
+.seeAll {
+    background:#F6F7F8;
+    padding:8px;
+    font-size:12px;
+    font-weight:bold;
+    border-top:solid 1px rgba(100, 100, 100, .30);
+    text-align:center;
+}
+.note {
+    display:block; 
+    color:#333;  
+    font-size:13px; 
+    padding:8px 0 8px 0; 
+    margin:0; 
+    min-width: 250px;
+    border-bottom:solid 1px rgba(100, 100, 100, .30);
+    text-align:center;
+}
+.seeAll a {
+    color:#3b5998;
+}
+.seeAll a:hover {
+    background:#F6F7F8;
+    color:#3b5998;
+    text-decoration:none;
+}
+
+.searchbox{
+    position:relative;
+    min-width:50px;
+    width:0%;
+    height:50px;
+    float:right;
+    overflow:hidden;
+
+    -webkit-transition: width 0.3s;
+    -moz-transition: width 0.3s;
+    -ms-transition: width 0.3s;
+    -o-transition: width 0.3s;
+    transition: width 0.3s;
+}
+
+.searchbox-icon{
+    width:50px;
+    height:50px;
+    display:block;
+    position:relative; 
+    /*top:0;
+    /*font-family:verdana;
+    /*font-size:22px;
+    /*right:0;
+    /*padding:0;
+    /*margin:0;
+    /*border:0;*/
+    /*outline:0;*/ 
+    /*line-height:50px; */
+    /*text-align:center;*/
+    /*cursor:pointer; */
+    /* color:#dcddd8; */
+    /* background:#172b3c; */
+}
+
+.searchbox-open{
+    width:100%;
+}
 
 </style> 
 
@@ -525,30 +575,30 @@ input[type="search"]:focus{
 <!--  Paper Kit Initialization and functons -->
 <script src="{% static 'js/paper-kit.js' %}"></script>
 
-<!-- <script src="{# static 'js/all.js' #}"></script> -->
-<script src="{% static 'js/all.min.js' %}"></script>
+<script src="{% static 'js/all.js' %}"></script>
+<!-- <script src="{# static 'js/all.min.js' #}"></script> -->
 
 <script>
-    $( document ).ready(function() {
+    $(document).ready(function() {
         
-        $.tab();
+        //$.tab()
 
-        $( 'a.js-post' ).postify( {
+        $('a.js-post').postify({
             csrfToken: "{{ csrf_token }}",
-        } );
+        });
 
         $('.js-messages').messages();
 
         {% if user.is_authenticated %}
-            $.notification( {
-                notificationUrl: "{% url 'notification:index-ajax' %}",
-                notificationListUrl: "{% url 'notification:index-unread' %}",
-                mentionTxt: "{% trans '{user} has mention you on {topic}' %}",
-                commentTxt: "{% trans '{user} has commented on {topic}' %}",
-                showAll: "{% trans 'Show all' %}",
-                empty: "{% trans 'No new notifications, yet' %}",
-                unread: "{% trans 'unread' %}",
-            } );
+           /* $.notification( {
+                notificationUrl: "{# url 'notification:index-ajax' #}",
+                notificationListUrl: "{# url 'notification:index-unread' #}",
+                mentionTxt: "{# trans '{user} has mention you on {topic}' #}",
+                commentTxt: "{# trans '{user} has commented on {topic}' #}",
+                showAll: "{# trans 'Show all' #}",
+                empty: "{# trans 'No new notifications, yet' #}",
+                unread: "{# trans 'unread' #}",
+            } ); */
             $('.js-like').like( {
                 csrfToken: "{{ csrf_token }}",
                 likeText: '{% trans "like" %} ({count})',
@@ -610,11 +660,113 @@ input[type="search"]:focus{
 
         hljs.initHighlightingOnLoad();
 
+        //$('.tabs').tab();
 
+        var timeDelay = 500;
+        setTimeout(updateNotification, timeDelay);
+        function updateNotification(){
+            var badge = $("#note-count-badge");  
+            $.ajax({
+                type: "POST",
+                url: "{% url 'get_notifications_ajax' %}",
+                data:{
+                    csrfmiddlewaretoken: "{{ csrf_token }}",
+                },
+                success:function(data){
+                    var count = data.count
+                    if (count == 0){
+                        return false;
+                    }else{
+                        badge.text(data.count);
+                        return true
+                    }
+                },
+                error: function(response, error){
+                    console.log(response);
+                    console.log(error);
+                }
+            })
+        } 
+        $('#noti_button').click(function () {
+            $('#note-count-badge').fadeOut('slow');
+            return true;
+        });
 
+        $("#noti_button").click(function(e){
+            e.preventDefault();
+
+            $.ajax({
+                type: "POST",
+                url: "{% url 'get_notifications_ajax' %}",
+                data:{
+                    csrfmiddlewaretoken: "{{ csrf_token }}",
+                    
+                },
+                success: function(data){
+                    $("#notification_dropdown").html('<h3 style="display:block; color:#333; font-weight:bold; font-size:13px; padding:8px; margin:0; border-bottom:solid 1px rgba(100, 100, 100, .30);">Notifications</h3>');
+                    var count = data.count
+                    // console.log(count)
+                    if (count > 0){
+                        $(data.notifications).each(function(){
+                        var link = this;    
+                        $("#notification_dropdown").append("<li class='note'>" + link + "</li>");
+                    })
+                    }
+                    var url = "{% url 'notifications_all' %}"
+                    $("#notification_dropdown").append("<li class='seeAll'><a href='" + url + "'>View All</a></li>")
+                },
+                error: function(rs, e){
+                    console.log(rs);
+                    console.log(e);
+                }
+            })
+        });
+
+        hljs.initHighlightingOnLoad();
+
+        var submitIcon = $('.searchbox-icon');
+        var inputBox = $('.searchbox-input');
+        var searchBox = $('.searchbox');
+        var isOpen = false;
+        submitIcon.click(function(){
+            if(isOpen == false){
+                searchBox.addClass('searchbox-open');
+                inputBox.focus();
+                isOpen = true;
+            } else {
+                searchBox.removeClass('searchbox-open');
+                inputBox.focusout();
+                isOpen = false;
+            }
+        });  
+         submitIcon.mouseup(function(){
+                return false;
+            });
+        searchBox.mouseup(function(){
+                return false;
+            });
+        $(document).mouseup(function(){
+                if(isOpen == true){
+                    $('.searchbox-icon').css('display','block');
+                    submitIcon.click();
+                }
+            });
     });
+        function buttonUp(){
+            var inputVal = $('.searchbox-input').val();
+            inputVal = $.trim(inputVal).length;
+            if( inputVal !== 0){
+                $('.searchbox-icon').css('display','none');
+            } else {
+                $('.searchbox-input').val('');
+                $('.searchbox-icon').css('display','block');
+            }
+        }
+        
+
 </script>
 {% block extra-js %}{% endblock %}
 {# block extra-js #}{# endblock #}
 </body>
 </html>
+<!-- padding:8px; -->

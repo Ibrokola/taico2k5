@@ -15,22 +15,23 @@ from topic.models import Topic
 from .models import Comment
 from .forms import CommentForm, CommentMoveForm, CommentImageForm
 from .utils import comment_posted, post_comment_update, pre_comment_update
-
+from notifications.signals import notify
 
 @login_required
 @ratelimit(rate='1/10s')
 def publish(request, topic_id, pk=None):
-    user = request.user
+    # user = request.user
     topic = get_object_or_404(
-        Topic.objects.opened().for_access(user),
+        Topic.objects.opened().for_access(request.user),
         pk=topic_id
         )
 
     if request.method == 'POST':
-        form = CommentForm(user=user, topic=topic, data=request.POST)
+        form = CommentForm(user=request.user, topic=topic, data=request.POST)
 
         if not request.is_limited() and form.is_valid():
-            if not user.u.update_post_hash(form.get_comment_hash()):
+            
+            if not request.user.u.update_post_hash(form.get_comment_hash()):
                 # Hashed comment may be in the process of been saved
                 return redirect(
                     request.POST.get('next', None) or
@@ -38,13 +39,17 @@ def publish(request, topic_id, pk=None):
                            .get_absolute_url())
 
             comment = form.save()
+            if topic.user != request.user:
+                notify.send(request.user, recipient=topic.user, verb='commented on your post', target=comment)
             comment_posted(comment=comment, mentions=form.mentions)
             return redirect(request.POST.get('next', comment.get_absolute_url()))
     else:
         initial = None
 
         if pk:  # todo: move to form courtesy of spirit forum
-            comment = get_object_or_404(Comment.objects.for_access(user=user), pk=pk)
+            comment = get_object_or_404(Comment.objects.for_access(user=request.user), pk=pk)
+            if comment.user != request.user:
+                notify.send(request.user, recipient=comment.user, verb='mentioned you on a post', target=comment)
             quote = markdown.quotify(comment.comment, comment.user.username)
             initial = {'comment': quote}
 

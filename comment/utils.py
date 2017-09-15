@@ -1,14 +1,14 @@
-from notification.models import TopicNotification, UNDEFINED
+from notifications.models import Notification
 from unread.models import TopicUnread
 from history.models import CommentHistory
 
 
 
 def comment_posted(comment, mentions):
-    TopicNotification.create_maybe(user=comment.user, comment=comment, action=UNDEFINED)
-    TopicNotification.notify_new_comment(comment=comment)
-    TopicNotification.notify_new_mentions(comment=comment, mentions=mentions)
-    TopicUnread.unread_new_comment(comment=comment)
+    # Notification.create_maybe(user=comment.user, comment=comment)
+    # Notification.notify_new_comment(comment=comment)
+    # Notification.notify_new_mentions(comment=comment, mentions=mentions)
+    # TopicUnread.unread_new_comment(comment=comment)
     comment.topic.increase_comment_count()
 
 
